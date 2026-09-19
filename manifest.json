@@ -1,19 +1,20 @@
 {
+  "id": "/Mariyam-Shebaloy/",
   "name": "Mariyam Shebaloy — Personal Clinic Management System",
   "short_name": "Mariyam Shebaloy",
   "description": "Personal clinic management and prescription system",
   "lang": "bn",
   "dir": "ltr",
-  "start_url": "./",
-  "id": "./",
-  "scope": "./",
+  "start_url": "/Mariyam-Shebaloy/",
+  "scope": "/Mariyam-Shebaloy/",
   "display": "standalone",
+  "display_override": ["window-controls-overlay", "standalone"],
   "orientation": "portrait",
   "background_color": "#f4f7fb",
   "theme_color": "#2563eb",
+  "prefer_related_applications": false,
   "icons": [
-    {"src":"icons/icon-192.png","sizes":"192x192","type":"image/png","purpose":"any"},
-    {"src":"icons/icon-512.png","sizes":"512x512","type":"image/png","purpose":"any"},
-    {"src":"icons/icon-512.png","sizes":"512x512","type":"image/png","purpose":"maskable"}
+    {"src":"/Mariyam-Shebaloy/icons/icon-192.png","sizes":"192x192","type":"image/png","purpose":"any maskable"},
+    {"src":"/Mariyam-Shebaloy/icons/icon-512.png","sizes":"512x512","type":"image/png","purpose":"any maskable"}
   ]
 }
