@@ -3,11 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#2563eb">
-<link rel="manifest" href="/Mariyam-Shebaloy/manifest.json">
-<link rel="icon" type="image/png" sizes="192x192" href="/Mariyam-Shebaloy/icons/icon-192.png">
-<link rel="apple-touch-icon" href="/Mariyam-Shebaloy/icons/icon-192.png">
-<title>Mariyam Shebaloy — Personal Clinic Management System — V6.2</title>
+<title>Mariyam Shebaloy • Final Fixed V6</title>
 <style>
 *{box-sizing:border-box}
 body{margin:0;font-family:Arial,"Noto Sans Bengali",sans-serif;background:#f4f7fb;color:#1f2937}
@@ -30,9 +26,6 @@ textarea{min-height:90px;resize:vertical}
 .hidden{display:none!important}
 .search{font-size:17px;padding:15px}
 .quick{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
-.stat-box{border:1px solid #e5e7eb;border-radius:14px;padding:16px;text-align:center;background:#f8fafc}
-.stat-number{font-size:28px;font-weight:800;color:#2563eb;line-height:1.1}
-.stat-label{font-size:13px;font-weight:700;color:#475569;margin-top:7px}
 .quick .card{margin:0;min-height:120px}
 @media(max-width:600px){.quick{grid-template-columns:1fr 1fr}}
 .list-item{border:1px solid #e5e7eb;border-radius:12px;padding:14px;margin:9px 0}
@@ -40,20 +33,6 @@ textarea{min-height:90px;resize:vertical}
 .row{display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap}
 .small{font-size:13px;color:#6b7280}
 .medicine-row{border:1px solid #e5e7eb;border-radius:12px;padding:12px;margin:10px 0}
-.autocomplete-wrap{position:relative}
-.autocomplete-menu{position:absolute;left:0;right:0;top:100%;z-index:2000;background:#fff;border:1px solid #cbd5e1;border-radius:0 0 10px 10px;box-shadow:0 10px 24px rgba(15,23,42,.18);max-height:260px;overflow:auto}
-.autocomplete-item{padding:10px 12px;border-bottom:1px solid #eef2f7;cursor:pointer}
-.autocomplete-item:hover{background:#eff6ff}
-.autocomplete-item b{color:#0f4f4b}
-.autocomplete-meta{font-size:12px;color:#64748b;margin-top:2px}
-.investigation-wrap{position:relative}
-.investigation-menu{position:absolute;left:0;right:0;top:100%;z-index:1900;background:#fff;border:1px solid #cbd5e1;border-radius:0 0 10px 10px;box-shadow:0 10px 24px rgba(15,23,42,.18);max-height:240px;overflow:auto}
-.investigation-item{padding:9px 12px;border-bottom:1px solid #eef2f7;cursor:pointer}
-.investigation-item:hover{background:#eff6ff}
-.chip{display:inline-flex;align-items:center;gap:5px;background:#e0f2fe;color:#075985;border:1px solid #bae6fd;border-radius:18px;padding:5px 9px;margin:4px 4px 0 0;font-size:12px}
-.chip button{border:0;background:transparent;color:#075985;font-weight:800;cursor:pointer}
-.print-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
-
 .medicine-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:8px}
 @media(max-width:700px){.medicine-grid{grid-template-columns:1fr 1fr}}
 hr{border:0;border-top:1px solid #e5e7eb;margin:18px 0}
@@ -91,24 +70,12 @@ hr{border:0;border-top:1px solid #e5e7eb;margin:18px 0}
 
   <button class="btn primary" style="width:100%;font-size:18px" onclick="showPage('patientForm')">＋ New Patient</button>
 
-  <div class="card dashboard-stats-card" style="margin-top:18px">
-    <div class="row" style="margin-bottom:12px">
-      <h3 style="margin:0">📊 Dashboard Statistics</h3>
-      <span class="small">সর্বশেষ তথ্য</span>
-    </div>
-    <div class="grid3">
-      <div class="stat-box">
-        <div class="stat-number" id="statTodayPatients">0</div>
-        <div class="stat-label">আজকে দেখা রোগী</div>
-      </div>
-      <div class="stat-box">
-        <div class="stat-number" id="statTotalPatients">0</div>
-        <div class="stat-label">মোট রোগী</div>
-      </div>
-      <div class="stat-box">
-        <div class="stat-number" id="statTotalPrescriptions">0</div>
-        <div class="stat-label">মোট প্রেসক্রিপশন</div>
-      </div>
+  <div class="card" style="margin-top:18px">
+    <div class="row"><h2 class="section-title" style="margin:0">📊 Dashboard Statistics</h2><span class="small">সর্বশেষ তথ্য</span></div>
+    <div class="grid3" style="margin-top:12px">
+      <div class="list-item" style="text-align:center;margin:0"><div id="statToday" style="font-size:34px;font-weight:800;color:#2563eb">0</div><b>আজকে দেখা রোগী</b></div>
+      <div class="list-item" style="text-align:center;margin:0"><div id="statPatients" style="font-size:34px;font-weight:800;color:#2563eb">0</div><b>মোট রোগী</b></div>
+      <div class="list-item" style="text-align:center;margin:0"><div id="statPrescriptions" style="font-size:34px;font-weight:800;color:#2563eb">0</div><b>মোট প্রেসক্রিপশন</b></div>
     </div>
   </div>
 
@@ -125,15 +92,18 @@ hr{border:0;border-top:1px solid #e5e7eb;margin:18px 0}
     <div class="card" onclick="showPage('history')" style="cursor:pointer">
       <h2>📋</h2><b>Visit History</b><div class="small">Previous visits</div>
     </div>
-    <div class="card" onclick="showPage('profile')" style="cursor:pointer">
-      <h2>👤</h2><b>Settings / Profile</b><div class="small">ডাক্তার ও ক্লিনিকের তথ্য পরিবর্তন করুন</div>
-    </div>
   </div>
-  <button class="btn secondary" style="width:100%;margin-top:14px;font-size:16px" onclick="showPage('templates')">⚙️ Disease Templates</button>
+  <button class="btn secondary" style="width:100%;margin-top:14px;font-size:16px" onclick="showPage('profile')">👤 Settings / Profile</button>
+  <button class="btn secondary" style="width:100%;margin-top:10px;font-size:16px" onclick="showPage('templates')">⚙️ Disease Templates</button>
   <button class="btn secondary" style="width:100%;margin-top:10px;font-size:16px" onclick="showPage('backup')">💾 Backup & Restore</button>
 </section>
 
 
+
+<!-- MEDICINE DETAIL -->
+<section id="medicineDetail" class="hidden">
+  <div class="card" id="medicineDetailBox"></div>
+</section>
 
 <!-- SETTINGS / PROFILE -->
 <section id="profile" class="hidden">
@@ -142,7 +112,9 @@ hr{border:0;border-top:1px solid #e5e7eb;margin:18px 0}
       <h2 class="section-title">👤 Settings / Profile</h2>
       <button class="btn secondary" onclick="showPage('home')">← Home</button>
     </div>
-    <div class="notice">এখানে আপনার ডাক্তার/ক্লিনিকের তথ্য পরিবর্তন করলে পরবর্তী নতুন ও সংরক্ষিত প্রেসক্রিপশন প্রিন্টে সেই তথ্য ব্যবহার হবে।</div>
+    <div class="notice">
+      এখানে ডাক্তার/ক্লিনিকের তথ্য পরিবর্তন করলে Dashboard header এবং পরবর্তী নতুন/প্রিন্ট করা Prescription-এ পরিবর্তিত তথ্য দেখাবে।
+    </div>
     <div class="grid">
       <div><label>ডাক্তারের নাম *</label><input id="profileName" placeholder="MD YASHIN GAZI"></div>
       <div><label>পদবি / ডিগ্রি</label><input id="profileDegree" placeholder="D.M.S, MCH"></div>
@@ -151,14 +123,13 @@ hr{border:0;border-top:1px solid #e5e7eb;margin:18px 0}
       <div><label>ক্লিনিক / ফার্মেসির নাম *</label><input id="profileClinic" placeholder="Mariyam Shebaloy"></div>
       <div><label>ঠিকানা</label><input id="profileAddress" placeholder="Pirojpur, Barobazar, Kaliganj, Jhenaidah"></div>
     </div>
-    <button class="btn primary" style="margin-top:14px" onclick="saveProfile()">💾 Save Profile</button>
-    <button class="btn secondary" style="margin-top:14px" onclick="resetProfileDefaults()">↺ Default Information</button>
+    <div style="margin-top:16px">
+      <button class="btn primary" onclick="saveProfile()">💾 Save Profile</button>
+      <button class="btn secondary" onclick="loadProfileForm()">↻ Reset Form</button>
+    </div>
+    <hr>
+    <div class="small">বর্তমান তথ্য: <b id="profilePreview"></b></div>
   </div>
-</section>
-
-<!-- MEDICINE DETAIL -->
-<section id="medicineDetail" class="hidden">
-  <div class="card" id="medicineDetailBox"></div>
 </section>
 
 <!-- DISEASE TEMPLATES -->
@@ -259,17 +230,6 @@ hr{border:0;border-top:1px solid #e5e7eb;margin:18px 0}
     </div>
     <label>Symptoms / Complaints</label><textarea id="pSymptoms"></textarea>
     <label>Initial Diagnosis</label><input id="pDiagnosis">
-    <label>Initial Investigation / পরীক্ষা-নিরীক্ষা</label>
-    <div class="investigation-wrap">
-      <input id="pInvestigation" autocomplete="off" placeholder="পরীক্ষার নাম লিখুন বা suggestion থেকে নির্বাচন করুন">
-      <div id="pInvestigationMenu" class="investigation-menu hidden"></div>
-    </div>
-    <div id="pInvestigationTags" style="margin-bottom:8px"></div>
-
-    <hr>
-    <div class="row"><h3>Initial Medicines</h3><div><button class="btn secondary" onclick="addPatientMedicineRow()">＋ Database Medicine</button><button class="btn secondary" onclick="addPatientCustomMedicineRow()">＋ Custom Medicine</button></div></div>
-    <div id="patientMedicines"></div>
-
     <label>Doctor's Advice</label><textarea id="pAdvice"></textarea>
     <div class="notice" style="margin-top:12px">এই সফটওয়্যারটি রেকর্ড ও prescription management-এর জন্য। রোগ নির্ণয় বা ওষুধের dose স্বয়ংক্রিয়ভাবে নির্ধারণ করে না। Prescription দেওয়ার আগে clinical judgment ও স্থানীয় guideline যাচাই করুন।</div>
     <button class="btn primary" id="patientSaveBtn" style="margin-top:14px" onclick="saveNewPatient()">Save Patient</button>
@@ -307,26 +267,13 @@ hr{border:0;border-top:1px solid #e5e7eb;margin:18px 0}
     <input id="vDiagnosis" list="diseaseList" oninput="applyDiseaseTemplate()">
     <datalist id="diseaseList"></datalist>
 
-    <label>Investigation / পরীক্ষা-নিরীক্ষা</label>
-    <div class="investigation-wrap">
-      <input id="vInvestigationInput" autocomplete="off" placeholder="পরীক্ষার নাম লিখুন বা suggestion থেকে নির্বাচন করুন">
-      <div id="vInvestigationMenu" class="investigation-menu hidden"></div>
-    </div>
-    <div id="vInvestigationTags" style="margin-bottom:8px"></div>
-    <input id="vInvestigation" type="hidden">
-
     <hr>
     <div class="row"><h3>Medicines</h3><button class="btn secondary" onclick="addMedicineRow()">＋ Database Medicine</button><button class="btn secondary" onclick="addCustomMedicineRow()">＋ Custom Medicine</button></div>
     <div class="notice">Disease template থাকলে medicine list এখানে আসতে পারে, কিন্তু final prescription আপনি নিজে review/edit করবেন।</div>
     <div id="visitMedicines"></div>
 
-    <label>Follow-up</label><input id="vFollowUp" placeholder="যেমন: ৭ দিন পরে / প্রয়োজন হলে">
     <label>Doctor's Advice</label><textarea id="vAdvice"></textarea>
-    <div class="print-actions">
-      <button class="btn success" onclick="saveVisit()">💾 Save Visit</button>
-      <button class="btn primary" onclick="printLatestSavedVisit()">🖨 Print Saved Visit</button>
-    </div>
-    <div class="small" style="margin-top:7px">Save করলে শুধু data সংরক্ষণ হবে। Print button আলাদাভাবে চাপলে prescription print হবে।
+    <button class="btn success" style="margin-top:14px" onclick="saveVisit()">Save Visit & Prescription</button>
   </div>
 </section>
 
@@ -352,8 +299,7 @@ hr{border:0;border-top:1px solid #e5e7eb;margin:18px 0}
       <button class="btn secondary" onclick="document.getElementById('medicineDbFile').click()">📥 Load medicines.json</button>
       <input id="medicineDbFile" type="file" accept=".json,application/json" style="display:none" onchange="importMedicineDatabase(this)">
     </div>
-    <div id="medicineDbStatus" class="notice" style="margin-top:10px">Medicine database status: checking…</div>
-    <input id="medicineSearch" class="search" placeholder="Search brand, generic, manufacturer or DAR number" oninput="renderMedicines()">
+    <input id="medicineSearch" class="search" placeholder="Medicine search" oninput="renderMedicines()">
     <div id="medicineList"></div>
   </div>
 </section>
@@ -389,7 +335,7 @@ hr{border:0;border-top:1px solid #e5e7eb;margin:18px 0}
 const KEY_PATIENTS = "myclinic_patients_v3";
 const KEY_MEDICINES = "myclinic_medicines_v3";
 const KEY_TEMPLATES = "myclinic_templates_v3";
-const KEY_PROFILE = "myclinic_profile_v2";
+const KEY_PROFILE = "myclinic_profile_v1";
 
 const DEFAULT_PROFILE = {
   name: "MD YASHIN GAZI",
@@ -431,14 +377,45 @@ function toast(msg){
   clearTimeout(window._toastTimer);
   window._toastTimer=setTimeout(()=>el.style.display="none",2200);
 }
+function showPage(id){
+  document.querySelectorAll("section").forEach(s=>s.classList.add("hidden"));
+  const page=document.getElementById(id);
+  if(!page)return;
+  page.classList.remove("hidden");
+  if(id==="home") renderDashboardStats();
+  if(id==="patients") renderPatients();
+  if(id==="medicines") renderMedicines();
+  if(id==="history") renderHistory();
+  if(id==="prescriptions") renderPrescriptions();
+  if(id==="profile") loadProfileForm();
+  if(id==="backup") updateBranding();
+loadProfileForm();
+renderDashboardStats();
+updateBackupPatientSelect();
+  window.scrollTo(0,0);
+}
+
+function getProfile(){
+  return {...DEFAULT_PROFILE, ...(profile || {})};
+}
+
+function updateBranding(){
+  const pr=getProfile();
+  const h=document.querySelector(".header h1");
+  if(h) h.textContent=pr.clinic || DEFAULT_PROFILE.clinic;
+}
 
 function loadProfileForm(){
+  const pr=getProfile();
   const map={
-    profileName:profile.name, profileDegree:profile.degree,
-    profilePhone1:profile.phone1, profilePhone2:profile.phone2,
-    profileClinic:profile.clinic, profileAddress:profile.address
+    profileName:pr.name, profileDegree:pr.degree, profilePhone1:pr.phone1,
+    profilePhone2:pr.phone2, profileClinic:pr.clinic, profileAddress:pr.address
   };
-  Object.entries(map).forEach(([id,val])=>{ const el=document.getElementById(id); if(el) el.value=val||""; });
+  Object.entries(map).forEach(([id,val])=>{
+    const el=document.getElementById(id); if(el) el.value=val||"";
+  });
+  const preview=document.getElementById("profilePreview");
+  if(preview) preview.textContent=[pr.name,pr.degree,pr.phone1,pr.phone2,pr.clinic,pr.address].filter(Boolean).join(" • ");
 }
 
 function saveProfile(){
@@ -450,190 +427,40 @@ function saveProfile(){
     clinic:document.getElementById("profileClinic").value.trim(),
     address:document.getElementById("profileAddress").value.trim()
   };
-  if(!next.name || !next.clinic){ toast("ডাক্তারের নাম ও ক্লিনিকের নাম দিন"); return; }
+  if(!next.name || !next.clinic){toast("ডাক্তারের নাম ও ক্লিনিকের নাম দিন");return;}
   profile={...DEFAULT_PROFILE,...next};
   save(KEY_PROFILE,profile);
-  applyProfileToHeader();
-  toast("Profile saved successfully");
-}
-
-function resetProfileDefaults(){
-  if(!confirm("Default profile information ফিরিয়ে আনবেন?")) return;
-  profile={...DEFAULT_PROFILE};
-  save(KEY_PROFILE,profile);
+  updateBranding();
   loadProfileForm();
-  applyProfileToHeader();
-  toast("Default profile restored");
+  toast("Profile saved");
 }
 
-function applyProfileToHeader(){
-  const h=document.querySelector(".header h1");
-  const sub=document.querySelector(".header p");
-  if(h) h.textContent=profile.clinic || DEFAULT_PROFILE.clinic;
-  if(sub) sub.textContent="Personal Clinic Management System";
-}
-
-function updateDashboardStats(){
-  const today = new Date();
-  const y = today.getFullYear();
-  const m = today.getMonth();
-  const d = today.getDate();
-
-  let todayPatients = new Set();
-  let totalPrescriptions = 0;
-
-  patients.forEach(p => {
-    (p.visits || []).forEach(v => {
-      totalPrescriptions++;
-      const dt = new Date(v.date);
-      if(!isNaN(dt.getTime()) &&
-         dt.getFullYear() === y &&
-         dt.getMonth() === m &&
-         dt.getDate() === d){
-        todayPatients.add(p.id);
-      }
+function renderDashboardStats(){
+  const today=new Date().toISOString().slice(0,10);
+  let todayVisits=0, totalVisits=0;
+  patients.forEach(p=>{
+    (p.visits||[]).forEach(v=>{
+      totalVisits++;
+      if(String(v.date||"").slice(0,10)===today) todayVisits++;
     });
   });
-
-  const todayEl = document.getElementById("statTodayPatients");
-  const totalPatientsEl = document.getElementById("statTotalPatients");
-  const rxEl = document.getElementById("statTotalPrescriptions");
-
-  if(todayEl) todayEl.textContent = todayPatients.size.toLocaleString();
-  if(totalPatientsEl) totalPatientsEl.textContent = patients.length.toLocaleString();
-  if(rxEl) rxEl.textContent = totalPrescriptions.toLocaleString();
-}
-
-function showPage(id){
-  document.querySelectorAll("section").forEach(s=>s.classList.add("hidden"));
-  document.getElementById(id).classList.remove("hidden");
-  if(id==="home") updateDashboardStats();
-  if(id==="profile") loadProfileForm();
-  if(id==="patients") renderPatients();
-  if(id==="medicines") renderMedicines();
-  if(id==="history") renderHistory();
-  if(id==="prescriptions") renderPrescriptions();
-  if(id==="backup") updateBackupPatientSelect();
-  window.scrollTo(0,0);
+  const a=document.getElementById("statToday");
+  const b=document.getElementById("statPatients");
+  const c=document.getElementById("statPrescriptions");
+  if(a)a.textContent=todayVisits;
+  if(b)b.textContent=patients.length;
+  if(c)c.textContent=totalVisits;
 }
 
 function nextPatientId(){
   return "P-" + String(patients.length + 1).padStart(4,"0");
 }
-const COMMON_INVESTIGATIONS=["CBC","ESR","CRP","FBS","RBS","HbA1c","Lipid Profile","LFT","S. Creatinine","Blood Urea","S. Electrolytes","TSH","FT4","Urine R/E","Urine C/S","Stool R/E","HBsAg","Anti-HCV","HIV","Dengue NS1","Dengue IgG/IgM","Widal Test","Malaria Test","X-Ray Chest P/A","X-Ray KUB","USG Whole Abdomen","USG KUB","ECG","Echocardiogram","CT Scan","MRI","Endoscopy","Colonoscopy","Pap Smear","FNAC","Biopsy"];
-let pInvestSelected=[];
-let vInvestSelected=[];
-
-function renderInvestigationTags(inputId, selected, tagId, hiddenId){
-  const tags=document.getElementById(tagId);
-  if(tags) tags.innerHTML=selected.map((x,i)=>`<span class="chip">${esc(x)} <button type="button" class="remove-investigation" data-input="${inputId}" data-index="${i}">×</button></span>`).join("");
-  const hidden=document.getElementById(hiddenId);
-  if(hidden) hidden.value=selected.join(", ");
-}
-
-function investigationMenu(input,menu,selected){
-  const q=(input.value||"").trim().toLowerCase();
-  const list=COMMON_INVESTIGATIONS.filter(x=>!selected.includes(x)&&(!q||x.toLowerCase().includes(q))).slice(0,20);
-  if(!list.length){menu.classList.add("hidden");menu.innerHTML="";return;}
-  menu.innerHTML=list.map(x=>`<div class="investigation-item" data-value="${esc(x)}">${esc(x)}</div>`).join("");
-  menu.classList.remove("hidden");
-}
-
-function setupInvestigation(inputId,menuId,selected,tagId,hiddenId){
-  const input=document.getElementById(inputId), menu=document.getElementById(menuId);
-  if(!input||!menu)return;
-  if(input.dataset.investigationReady==="1"){
-    renderInvestigationTags(inputId,selected,tagId,hiddenId);
-    return;
-  }
-  input.dataset.investigationReady="1";
-  input.addEventListener("focus",()=>investigationMenu(input,menu,selected));
-  input.addEventListener("input",()=>investigationMenu(input,menu,selected));
-  input.addEventListener("keydown",e=>{
-    if(e.key!=="Enter") return;
-    e.preventDefault();
-    const v=input.value.trim();
-    if(v&&!selected.includes(v)) selected.push(v);
-    input.value="";
-    renderInvestigationTags(inputId,selected,tagId,hiddenId);
-    menu.classList.add("hidden");
-  });
-  menu.addEventListener("mousedown",e=>{
-    const item=e.target.closest(".investigation-item");
-    if(!item)return;
-    e.preventDefault();
-    const v=item.dataset.value;
-    if(v&&!selected.includes(v)) selected.push(v);
-    input.value="";
-    renderInvestigationTags(inputId,selected,tagId,hiddenId);
-    menu.classList.add("hidden");
-  });
-  renderInvestigationTags(inputId,selected,tagId,hiddenId);
-}
-
-function removeInvestigation(inputId,index){
-  const arr=inputId==="pInvestigation"?pInvestSelected:vInvestSelected;
-  if(index>=0&&index<arr.length) arr.splice(index,1);
-  const tagId=inputId==="pInvestigation"?"pInvestigationTags":"vInvestigationTags";
-  const hiddenId=inputId==="pInvestigation"?"pInvestigation":"vInvestigation";
-  renderInvestigationTags(inputId,arr,tagId,hiddenId);
-  const input=document.getElementById(inputId);
-  if(input) input.value="";
-}
-
-function syncInvestigationHidden(which){
-  if(which==="v"){
-    const h=document.getElementById("vInvestigation"); if(h) h.value=vInvestSelected.join(", ");
-  }else{
-    const h=document.getElementById("pInvestigation"); if(h) h.value=pInvestSelected.join(", ");
-  }
-}
-
 function clearPatientForm(){
-  ["pName","pPhone","pAge","pAddress","pBP","pTemp","pWeight","pSymptoms","pDiagnosis","pAdvice"].forEach(id=>{const e=document.getElementById(id);if(e)e.value=""});
+  ["pName","pPhone","pAge","pAddress","pBP","pTemp","pWeight","pSymptoms","pDiagnosis","pAdvice"].forEach(id=>document.getElementById(id).value="");
   document.getElementById("pGender").value="";
   document.getElementById("pId").value=nextPatientId();
-  pInvestSelected=[]; vInvestSelected=[];
-  const pt=document.getElementById("pInvestigationTags"); if(pt)pt.innerHTML="";
-  const pi=document.getElementById("pInvestigation"); if(pi)pi.value="";
-  const pm=document.getElementById("patientMedicines"); if(pm){pm.innerHTML="";addPatientMedicineRow();}
 }
 clearPatientForm();
-setupInvestigation("pInvestigation","pInvestigationMenu",pInvestSelected,"pInvestigationTags","pInvestigation");
-updateDashboardStats();
-
-function collectPatientMedicines(){
-  return [...document.querySelectorAll("#patientMedicines .medicine-row")].map(row=>{
-    if(row.dataset.type==="custom"){
-      const name=row.querySelector(".custom-med-name")?.value.trim();
-      if(!name)return null;
-      return {medicineId:"CUSTOM",custom:true,name,generic:"",strength:row.querySelector(".custom-med-strength")?.value.trim()||"",form:row.querySelector(".custom-med-form")?.value.trim()||"",frequency:row.querySelector(".med-frequency")?.value.trim()||"",food:row.querySelector(".med-food")?.value||"",duration:row.querySelector(".med-duration")?.value.trim()||"",condition:row.querySelector(".med-condition")?.value.trim()||""};
-    }
-    const id=row.querySelector(".med-id")?.value||"";
-    const m=medicines.find(x=>String(x.id)===String(id));
-    const name=row.querySelector(".med-search")?.value.trim();
-    if(!name)return null;
-    return {medicineId:m?.id||id,name,generic:m?.generic||m?.genericName||"",strength:row.querySelector(".med-strength")?.value.trim()||m?.strength||"",form:m?.form||m?.dosageForm||"",frequency:row.querySelector(".med-frequency")?.value.trim()||"",food:row.querySelector(".med-food")?.value||"",duration:row.querySelector(".med-duration")?.value.trim()||"",condition:row.querySelector(".med-condition")?.value.trim()||""};
-  }).filter(Boolean);
-}
-function addPatientMedicineRow(data={}){
-  const holder=document.getElementById("patientMedicines");
-  if(!holder)return;
-  const row=document.createElement("div"); row.className="medicine-row"; row.dataset.type="database";
-  row.innerHTML=`<div class="autocomplete-wrap"><input class="med-search" autocomplete="off" placeholder="Brand / Generic / Manufacturer" value="${esc(data.name||"")}"><div class="autocomplete-menu med-menu hidden"></div><input class="med-id" type="hidden" value="${esc(data.medicineId||"")}"></div><div class="small med-db-info"></div><div class="medicine-grid" style="margin-top:8px"><input class="med-frequency" placeholder="Frequency" value="${esc(data.frequency||"")}"><select class="med-food"><option value="">খাবারের সময়</option><option>খাবার আগে</option><option>খাবার পরে</option><option>খাবারের মাঝে</option><option>যেকোনো সময়</option></select><input class="med-duration" placeholder="Duration" value="${esc(data.duration||"")}"><input class="med-strength" placeholder="Strength" value="${esc(data.strength||"")}></div><input class="med-condition" style="margin-top:8px" placeholder="প্রয়োজনে / শর্ত" value="${esc(data.condition||"")}"><button class="btn danger" style="margin-top:8px" onclick="this.parentElement.remove()">Remove</button>`;
-  holder.appendChild(row);
-  const input=row.querySelector(".med-search"),menu=row.querySelector(".med-menu");
-  function draw(){const list=medicineSearchList(input.value);if(!list.length){menu.classList.add("hidden");return}menu.innerHTML=list.map(m=>`<div class="autocomplete-item" data-id="${esc(m.id)}"><b>${esc(m.name||m.brandName||"")}</b><div class="autocomplete-meta">${esc([m.generic,m.strength,m.form,m.manufacturer].filter(Boolean).join(" · "))}</div></div>`).join("");menu.classList.remove("hidden")}
-  input.addEventListener("focus",draw);input.addEventListener("input",draw);
-  menu.addEventListener("mousedown",e=>{const it=e.target.closest(".autocomplete-item");if(!it)return;e.preventDefault();const m=medicines.find(x=>String(x.id)===String(it.dataset.id));if(!m)return;input.value=m.name||m.brandName||"";row.querySelector(".med-id").value=m.id||"";row.querySelector(".med-strength").value=m.strength||"";row.querySelector(".med-frequency").value=m.frequency||"";row.querySelector(".med-food").value=m.food||"";row.querySelector(".med-duration").value=m.duration||"";row.querySelector(".med-db-info").textContent=[m.generic,m.form,m.manufacturer,m.darNumber].filter(Boolean).join(" · ");menu.classList.add("hidden")});
-  if(data.food)row.querySelector(".med-food").value=data.food;
-}
-function addPatientCustomMedicineRow(data={}){
-  const row=document.createElement("div");row.className="medicine-row";row.dataset.type="custom";
-  row.innerHTML=`<div class="medicine-grid"><input class="custom-med-name" placeholder="Custom Brand Name" value="${esc(data.name||"")}"><input class="custom-med-strength" placeholder="Strength" value="${esc(data.strength||"")}"><input class="custom-med-form" placeholder="Form" value="${esc(data.form||"")}"><input class="med-frequency" placeholder="Frequency" value="${esc(data.frequency||"")}"></div><div class="medicine-grid" style="margin-top:8px"><select class="med-food"><option value="">খাবারের সময়</option><option>খাবার আগে</option><option>খাবার পরে</option><option>খাবারের মাঝে</option><option>যেকোনো সময়</option></select><input class="med-duration" placeholder="Duration" value="${esc(data.duration||"")}"><div></div><div></div></div><input class="med-condition" style="margin-top:8px" placeholder="প্রয়োজনে / শর্ত" value="${esc(data.condition||"")}"><button class="btn danger" style="margin-top:8px" onclick="this.parentElement.remove()">Remove</button>`;
-  document.getElementById("patientMedicines").appendChild(row);
-  if(data.food)row.querySelector(".med-food").value=data.food;
-}
 
 function saveNewPatient(){
   const name=document.getElementById("pName").value.trim();
@@ -658,17 +485,15 @@ function saveNewPatient(){
     weight:document.getElementById("pWeight").value.trim(),
     symptoms:document.getElementById("pSymptoms").value.trim(),
     diagnosis:document.getElementById("pDiagnosis").value.trim(),
-    investigation:(document.getElementById("pInvestigation")?.value||"").trim(),
-    medicines:collectPatientMedicines(),
+    medicines:[],
     advice:document.getElementById("pAdvice").value.trim()
   };
-  if(firstVisit.bp||firstVisit.temperature||firstVisit.weight||firstVisit.symptoms||firstVisit.diagnosis||firstVisit.investigation||firstVisit.medicines.length||firstVisit.advice){
+  if(firstVisit.bp||firstVisit.temperature||firstVisit.weight||firstVisit.symptoms||firstVisit.diagnosis||firstVisit.advice){
     patient.visits.push(firstVisit);
   }
 
   patients.push(patient);
   save(KEY_PATIENTS,patients);
-  updateDashboardStats();
   toast("Patient saved");
   resetPatientFormMode();
   openPatient(patient.id);
@@ -730,7 +555,6 @@ function visitCard(p,v){
     <p><b>Symptoms:</b> ${esc(v.symptoms||"-")}</p>
     ${v.medicines?.length ? "<b>Medicines:</b><ul>"+v.medicines.map(m=>`<li><b>${esc(m.name)} ${esc(m.strength)}</b> — ${esc(m.frequency||"-")} • ${esc(m.food||"-")} • ${esc(m.duration||"-")}</li>`).join("")+"</ul>":""}
     <p><b>Advice:</b> ${esc(v.advice||"-")}</p>
-    <p><b>Follow-up:</b> ${esc(v.followUp||"-")}</p>
     <button class="btn secondary" onclick="printPrescription('${p.id}','${v.id}')">🖨 Print</button>
   </div>`;
 }
@@ -796,13 +620,8 @@ function startVisit(id){
   document.getElementById("visitPatientInfo").innerHTML=`
     <div class="list-item"><b>${esc(p.name)}</b> <span class="badge">${esc(p.id)}</span>
     <div class="small">${esc(p.phone)} • Age ${esc(p.age||"-")} • ${esc(p.gender||"-")}</div></div>`;
-  ["vBP","vTemp","vWeight","vSymptoms","vDiagnosis","vInvestigation","vAdvice"].forEach(x=>document.getElementById(x).value="");
+  ["vBP","vTemp","vWeight","vSymptoms","vDiagnosis","vAdvice"].forEach(x=>document.getElementById(x).value="");
   document.getElementById("visitMedicines").innerHTML="";
-  
-  pInvestSelected=[];
-  vInvestSelected=[];
-  setupInvestigation("vInvestigationInput","vInvestigationMenu",vInvestSelected,"vInvestigationTags","vInvestigation");
-  renderInvestigationTags("vInvestigationInput",vInvestSelected,"vInvestigationTags","vInvestigation");
   fillDiseaseList();
   showPage("visitForm");
 }
@@ -826,67 +645,22 @@ function medicineOptions(selected=""){
   return medicines.map(m=>`<option value="${esc(m.id)}" ${m.id===selected?"selected":""}>${esc(m.name||"Unnamed")}</option>`).join("");
 }
 
-function medicineSearchList(q){
-  q=(q||"").toLowerCase().trim();
-  if(!q)return [];
-  return medicines.filter(m=>{
-    const s=[m.name,m.brandName,m.generic,m.strength,m.form,m.manufacturer,m.darNumber].filter(Boolean).join(" ").toLowerCase();
-    return s.includes(q);
-  }).slice(0,20);
-}
 function addMedicineRow(data={}){
   const row=document.createElement("div");
   row.className="medicine-row";
   row.dataset.type="database";
   row.innerHTML=`
-    <div class="autocomplete-wrap">
-      <input class="med-search" autocomplete="off" placeholder="Brand / Generic / Manufacturer" value="${esc(data.name||"")}">
-      <div class="autocomplete-menu med-menu hidden"></div>
-      <input class="med-id" type="hidden" value="${esc(data.medicineId||"")}">
-    </div>
-    <div class="small med-db-info" style="margin-top:4px"></div>
-    <div class="medicine-grid" style="margin-top:8px">
+    <div class="medicine-grid">
+      <select class="med-select"><option value="">Select medicine from database</option>${medicineOptions(data.medicineId||"")}</select>
       <input class="med-frequency" placeholder="Frequency" value="${esc(data.frequency||"")}">
-      <select class="med-food"><option value="">খাবারের সময়</option><option>খাবার আগে</option><option>খাবার পরে</option><option>খাবারের মাঝে</option><option>যেকোনো সময়</option></select>
+      <select class="med-food"><option value="">Food</option><option>Before food</option><option>After food</option><option>With food</option><option>Any time</option></select>
       <input class="med-duration" placeholder="Duration" value="${esc(data.duration||"")}">
-      <input class="med-strength" placeholder="Strength" value="${esc(data.strength||"")}">
     </div>
-    <input class="med-condition" style="margin-top:8px" placeholder="প্রয়োজনে / শর্ত (যেমন: ব্যথা থাকলে, জ্বর হলে, জ্বর না থাকলে খাবেনা)" value="${esc(data.condition||"")}">
     <button class="btn danger" style="margin-top:8px" onclick="this.parentElement.remove()">Remove</button>`;
   document.getElementById("visitMedicines").appendChild(row);
-
-  const input=row.querySelector(".med-search"), menu=row.querySelector(".med-menu");
-  const info=row.querySelector(".med-db-info");
-  function draw(){
-    const list=medicineSearchList(input.value);
-    if(!list.length){menu.classList.add("hidden");return;}
-    menu.innerHTML=list.map(m=>{
-      const generic=m.generic||m.genericName||"";
-      const meta=[generic,m.strength,m.form,m.manufacturer].filter(Boolean).join(" · ");
-      return `<div class="autocomplete-item" data-id="${esc(m.id)}"><b>${esc(m.name||m.brandName||"")}</b><div class="autocomplete-meta">${esc(meta)}</div></div>`;
-    }).join("");
-    menu.classList.remove("hidden");
-  }
-  input.addEventListener("focus",draw);
-  input.addEventListener("input",draw);
-  menu.addEventListener("mousedown",e=>{
-    const item=e.target.closest(".autocomplete-item"); if(!item)return;
-    e.preventDefault();
-    const m=medicines.find(x=>String(x.id)===String(item.dataset.id)); if(!m)return;
-    input.value=m.name||m.brandName||"";
-    row.querySelector(".med-id").value=m.id||"";
-    row.querySelector(".med-strength").value=m.strength||"";
-    row.querySelector(".med-frequency").value=m.frequency||"";
-    row.querySelector(".med-food").value=m.food||"";
-    row.querySelector(".med-duration").value=m.duration||"";
-    info.textContent=[m.generic,m.form,m.manufacturer,m.darNumber].filter(Boolean).join(" · ");
-    menu.classList.add("hidden");
-  });
-  document.addEventListener("click",function close(e){
-    if(!row.contains(e.target)){menu.classList.add("hidden");document.removeEventListener("click",close);}
-  });
   if(data.food) row.querySelector(".med-food").value=data.food;
 }
+
 function addCustomMedicineRow(data={}){
   const row=document.createElement("div");
   row.className="medicine-row";
@@ -899,11 +673,10 @@ function addCustomMedicineRow(data={}){
       <input class="med-frequency" placeholder="Frequency" value="${esc(data.frequency||"")}">
     </div>
     <div class="medicine-grid" style="margin-top:8px">
-      <select class="med-food"><option value="">খাবারের সময়</option><option>খাবার আগে</option><option>খাবার পরে</option><option>খাবারের মাঝে</option><option>যেকোনো সময়</option></select>
+      <select class="med-food"><option value="">Food</option><option>Before food</option><option>After food</option><option>With food</option><option>Any time</option></select>
       <input class="med-duration" placeholder="Duration" value="${esc(data.duration||"")}">
       <div></div><div></div>
     </div>
-    <input class="med-condition" style="margin-top:8px" placeholder="প্রয়োজনে / শর্ত (যেমন: ব্যথা থাকলে, জ্বর হলে, জ্বর না থাকলে খাবেনা)" value="${esc(data.condition||"")}">
     <div class="small" style="margin-top:6px">Custom medicine শুধু এই visit-এ থাকবে; Medicine Database-এ automatically যোগ হবে না।</div>
     <button class="btn danger" style="margin-top:8px" onclick="this.parentElement.remove()">Remove</button>`;
   document.getElementById("visitMedicines").appendChild(row);
@@ -926,38 +699,26 @@ function collectVisitMedicines(){
       const name=row.querySelector(".custom-med-name").value.trim();
       if(!name)return null;
       return {
-        medicineId:"CUSTOM", custom:true, name,
+        medicineId:"CUSTOM",
+        custom:true,
+        name,
         generic:"",
         strength:row.querySelector(".custom-med-strength").value.trim(),
         form:row.querySelector(".custom-med-form").value.trim(),
         frequency:row.querySelector(".med-frequency").value.trim(),
         food:row.querySelector(".med-food").value,
-        duration:row.querySelector(".med-duration").value.trim(),
-        condition:row.querySelector(".med-condition")?.value.trim()||""
+        duration:row.querySelector(".med-duration").value.trim()
       };
     }
-    const id=row.querySelector(".med-id")?.value;
-    const m=medicines.find(x=>String(x.id)===String(id));
-    const name=row.querySelector(".med-search")?.value.trim();
-    if(!name)return null;
-    return {
-      medicineId:m?.id||id||"CUSTOM",
-      name,
-      generic:m?.generic||m?.genericName||"",
-      strength:row.querySelector(".med-strength").value.trim() || m?.strength || "",
-      form:m?.form||m?.dosageForm||"",
-      frequency:row.querySelector(".med-frequency").value.trim(),
-      food:row.querySelector(".med-food").value,
-      duration:row.querySelector(".med-duration").value.trim(),
-      condition:row.querySelector(".med-condition")?.value.trim()||""
-    };
+    const id=row.querySelector(".med-select").value;
+    const m=medicines.find(x=>x.id===id);
+    if(!m)return null;
+    return {medicineId:m.id,name:m.name,generic:m.generic||"",strength:m.strength||"",form:m.form||"",frequency:row.querySelector(".med-frequency").value.trim(),food:row.querySelector(".med-food").value,duration:row.querySelector(".med-duration").value.trim()};
   }).filter(Boolean);
 }
 
 function saveVisit(){
-  const p=patients.find(x=>x.id===currentVisitPatientId);
-  if(!p){toast("Patient নির্বাচন করুন");return;}
-  syncInvestigationHidden("v");
+  const p=patients.find(x=>x.id===currentVisitPatientId); if(!p)return;
   const visit={
     id:uid("V-"),date:new Date().toISOString(),
     bp:document.getElementById("vBP").value.trim(),
@@ -965,21 +726,13 @@ function saveVisit(){
     weight:document.getElementById("vWeight").value.trim(),
     symptoms:document.getElementById("vSymptoms").value.trim(),
     diagnosis:document.getElementById("vDiagnosis").value.trim(),
-    investigation:document.getElementById("vInvestigation").value.trim(),
     medicines:collectVisitMedicines(),
-    followUp:document.getElementById("vFollowUp")?.value.trim()||"",
     advice:document.getElementById("vAdvice").value.trim()
   };
   p.visits.push(visit);
   save(KEY_PATIENTS,patients);
-  updateDashboardStats();
-  toast("Visit saved successfully");
-}
-function printLatestSavedVisit(){
-  const p=patients.find(x=>x.id===currentVisitPatientId);
-  if(!p || !p.visits || !p.visits.length){toast("আগে Save Visit করুন");return;}
-  const v=p.visits[p.visits.length-1];
-  printPrescription(p.id,v.id);
+  toast("Visit saved");
+  openPatient(p.id);
 }
 
 function addMedicine(){
@@ -1017,18 +770,16 @@ async function importMedicineDatabase(input){
   if(!file)return;
   if(!/json$/i.test(file.name)){toast("medicines.json নির্বাচন করুন");input.value="";return;}
   try{
-    toast("Reading medicine database… Please wait");
+    toast("Reading 39,195 medicine records…");
     const text=await file.text();
     const db=JSON.parse(text);
     if(!Array.isArray(db))throw new Error("Invalid database");
     await putDGDAInIndexedDB(db);
     dgdaMedicines=db.map(normalizeMedicine);
     medicineDbReady=true;
-    medicines=[...load(KEY_MEDICINES,[]).filter(m=>m.custom===true || m.source==="User added"),...dgdaMedicines];
+    medicines=[...load(KEY_MEDICINES,[]),...dgdaMedicines];
     dedupeMedicinesInMemory();
     renderMedicines();
-    const status=document.getElementById("medicineDbStatus");
-    if(status) status.innerHTML=`✅ DGDA medicine database ready: <b>${dgdaMedicines.length.toLocaleString()}</b> medicines.`;
     toast(`DGDA database imported: ${dgdaMedicines.length.toLocaleString()} medicines`);
   }catch(e){
     console.error(e);
@@ -1042,7 +793,7 @@ function renderMedicines(){
   if(!box)return;
   const q=(document.getElementById("medicineSearch")?.value||"").toLowerCase().trim();
   const list=medicines.filter(m=>
-    (m.name+" "+(m.brandName||"")+" "+(m.generic||"")+" "+(m.strength||"")+" "+(m.form||"")+" "+(m.manufacturer||"")+" "+(m.therapeuticClass||"")+" "+(m.darNumber||"")).toLowerCase().includes(q)
+    (m.name+" "+(m.generic||"")+" "+(m.strength||"")+" "+(m.form||"")+" "+(m.manufacturer||"")+" "+(m.therapeuticClass||"")).toLowerCase().includes(q)
   );
   if(!list.length){box.innerHTML='<div class="empty">No medicines found.</div>';return;}
   const MAX=300;
@@ -1220,8 +971,6 @@ function openPrescription(pid,vid){
       <p>${esc(v.symptoms||"-").replace(/\\n/g,"<br>")}</p>
       <b>Diagnosis</b>
       <p>${esc(v.diagnosis||"-")}</p>
-      <b>Investigation / পরীক্ষা-নিরীক্ষা</b>
-      <p>${esc(v.investigation||"-").replace(/\\n/g,"<br>")}</p>
     </div>
 
     <h3>💊 Medicines (${meds.length})</h3>
@@ -1238,7 +987,6 @@ function openPrescription(pid,vid){
           <b>Frequency:</b> ${esc(m.frequency||"-")} &nbsp; 
           <b>Food:</b> ${esc(m.food||"-")} &nbsp;
           <b>Duration:</b> ${esc(m.duration||"-")}
-          ${m.condition ? `<div style="margin-top:6px"><b>শর্ত:</b> (${esc(m.condition)})</div>` : ""}
         </div>
       </div>`).join("") :
       '<div class="empty">এই prescription-এ কোনো medicine save করা হয়নি।</div>'}
@@ -1246,11 +994,6 @@ function openPrescription(pid,vid){
     <div class="list-item" style="margin-top:18px">
       <b>Doctor's Advice</b>
       <p>${esc(v.advice||"-").replace(/\\n/g,"<br>")}</p>
-    </div>
-
-    <div class="list-item">
-      <b>Follow-up</b>
-      <p>${esc(v.followUp||"-")}</p>
     </div>
 
     <button class="btn primary" onclick="printPrescription('${p.id}','${v.id}')">🖨 Print Prescription</button>
@@ -1264,172 +1007,232 @@ function printPrescription(pid,vid){
   const v=p.visits.find(x=>x.id===vid); if(!v)return;
 
   const medRows=(v.medicines||[]).map((m,i)=>`
-    <tr>
-      <td class="serial">${i+1}</td>
-      <td class="medicine-name">
-        <strong>${esc(m.name||"-")}</strong> ${esc(m.strength||"")}
-        ${m.generic?`<br><span class="generic">${esc(m.generic)}</span>`:""}
-        ${m.form?`<br><span class="form">${esc(m.form)}</span>`:""}
-        ${m.condition?`<br><span class="condition">(${esc(m.condition)})</span>`:""}
-      </td>
-      <td>${esc(m.frequency||"-")}</td>
-      <td>${esc(m.food||"-")}</td>
-      <td>${esc(m.duration||"-")}</td>
-    </tr>`).join("");
-
-  const dateText=new Date(v.date).toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'});
+    <tr><td>${i+1}</td><td>${esc(m.name)} ${esc(m.strength)}<br><small>${esc(m.form)}</small></td>
+    <td>${esc(m.frequency)}</td><td>${esc(m.food)}</td><td>${esc(m.duration)}</td></tr>`).join("");
 
   const html=`<!DOCTYPE html>
-<html lang="bn"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Prescription - ${esc(p.name)}</title>
+<html><head><meta charset="UTF-8"><title>Prescription - ${esc(p.name)}</title>
 <style>
-@page{size:A4 portrait;margin:7mm}
-*{box-sizing:border-box}
-html,body{margin:0;padding:0;background:#fff;color:#172033}
-body{font-family:Arial,"Noto Sans Bengali",sans-serif;-webkit-print-color-adjust:exact;print-color-adjust:exact}
-.sheet{width:196mm;height:283mm;max-height:283mm;margin:0 auto;position:relative;overflow:hidden}
-.topbar{height:2.5mm;background:#0f766e}
-.header{padding:4mm 5mm 3mm;border:1px solid #dbe5e5;border-top:0;background:#f0fdfa}
-.doctor-row{display:flex;justify-content:space-between;gap:8mm;align-items:flex-start}
-.doctor-name{font-size:21pt;line-height:1.05;font-weight:800;color:#0f4f4b;margin:0 0 1mm}
-.degree{font-size:10pt;font-weight:700;color:#334155;margin-bottom:1mm}
-.contact{font-size:8.5pt;color:#475569;line-height:1.35}
-.clinic-box{text-align:right;font-size:7.5pt;color:#475569;line-height:1.35}
-.clinic-title{font-size:12pt;font-weight:800;color:#0f766e;margin-bottom:1mm}
-.rule{height:.4mm;background:#cde5e3;margin-top:2mm}
-.patient{margin:3mm 5mm 2.5mm;border:1px solid #cfe4e3;border-radius:2mm;overflow:hidden}
-.patient-head{background:#ecfdfb;padding:1.5mm 2.5mm;font-size:8.5pt;font-weight:800;color:#0f5f5a}
-.patient-grid{display:grid;grid-template-columns:2.0fr .65fr .8fr 1.25fr 1.25fr}
-.patient-cell{padding:1.8mm 2mm;border-top:1px solid #e5eeee;border-right:1px solid #e5eeee;min-height:12mm}
-.patient-cell:last-child{border-right:0}
-.label{display:block;font-size:6.5pt;color:#64748b;margin-bottom:.5mm}
-.value{font-size:8.5pt;font-weight:700;color:#172033;word-break:break-word}
-.body-grid{display:grid;grid-template-columns:50mm 1fr;gap:4mm;padding:0 5mm}
-.left-col{border-right:1px solid #dce8e8;padding-right:3.5mm}
-.right-col{min-width:0}
-.box{border:1px solid #dce8e8;border-radius:2mm;margin-bottom:2.5mm;overflow:hidden}
-.box-title{background:#f0fdfa;color:#0f5f5a;font-weight:800;font-size:9pt;padding:1.7mm 2.5mm;border-bottom:1px solid #dce8e8}
-.box-body{padding:2.2mm 2.5mm;font-size:8pt;line-height:1.45;min-height:10mm;white-space:pre-wrap}
-.vitals{display:grid;grid-template-columns:1fr 1fr;gap:1.5mm}
-.vital{border:1px solid #e2e8f0;border-radius:1.5mm;padding:1.5mm;font-size:7.5pt}
-.vital b{color:#0f766e}
-.rx-title{font-family:Georgia,serif;font-size:22pt;font-weight:700;font-style:italic;color:#0f4f4b;margin:0 0 1mm}
-.rx-sub{font-size:7.5pt;color:#64748b;margin-bottom:2mm}
-table{width:100%;border-collapse:collapse;border:1px solid #d9e6e6;font-size:7.7pt}
-th{background:#0f766e;color:#fff;text-align:left;padding:1.8mm 1.5mm;font-size:7.2pt}
-td{padding:1.8mm 1.5mm;border-top:1px solid #e5eeee;vertical-align:top;line-height:1.25}
-td+td{border-left:1px solid #eef3f3}
-.serial{width:7mm;text-align:center}
-.medicine-name{min-width:55mm}
-.generic,.form{font-size:6.8pt;color:#64748b}
-.condition{font-size:7pt;color:#334155;font-style:italic}
-.advice{border:1px solid #d9e6e6;border-left:1.2mm solid #14b8a6;border-radius:2mm;padding:2.2mm 2.5mm;margin-top:2.5mm;font-size:8pt;line-height:1.45;white-space:pre-wrap}
-.advice-title{font-weight:800;color:#0f766e;font-size:8.5pt;margin-bottom:1mm}
-.signature{margin-top:10mm;display:flex;justify-content:flex-end}
-.signature-box{text-align:center;width:42mm;font-size:7.5pt;color:#475569}
-.signature-line{border-top:1px solid #64748b;margin-bottom:1mm}
-.footer{position:absolute;bottom:0;left:0;right:0;border-top:1px solid #d6eeee;padding:2.2mm 5mm;color:#64748b;font-size:6.8pt;display:flex;justify-content:space-between;gap:5mm}
-.footer strong{color:#0f766e}
-.no-print{margin:10px 0;text-align:center}.no-print button{border:0;background:#0f766e;color:#fff;padding:9px 15px;border-radius:7px;font-weight:700;cursor:pointer}
-@media print{.no-print{display:none!important}}
+body{font-family:Arial,sans-serif;margin:35px;color:#111}
+h1{margin-bottom:4px} .sub{color:#555}
+.box{border:1px solid #ccc;padding:15px;margin:18px 0}
+table{width:100%;border-collapse:collapse;margin-top:12px}
+th,td{border:1px solid #ccc;padding:9px;text-align:left}
+.sig{margin-top:80px;text-align:right}
+@media print{button{display:none}}
 </style></head><body>
-<div class="no-print"><button onclick="window.print()">🖨 Print Prescription</button></div>
-<div class="sheet">
-  <div class="topbar"></div>
-  <header class="header">
-    <div class="doctor-row">
-      <div>
-        <div class="doctor-name">${esc(profile.name||"-")}</div>
-        <div class="degree">${esc(profile.degree||"")}</div>
-        <div class="contact">${esc([profile.phone1,profile.phone2].filter(Boolean).join(", "))}${profile.address?`<br>${esc(profile.address)}`:""}</div>
-      </div>
-      <div class="clinic-box">
-        <div class="clinic-title">${esc(profile.clinic||"-")}</div>
-        <div style="margin-top:1.5mm">Date: <strong>${dateText}</strong></div>
-      </div>
-    </div>
-    <div class="rule"></div>
-  </header>
-
-  <section class="patient">
-    <div class="patient-head">PATIENT INFORMATION</div>
-    <div class="patient-grid">
-      <div class="patient-cell"><span class="label">নাম</span><span class="value">${esc(p.name||"-")}</span></div>
-      <div class="patient-cell"><span class="label">বয়স</span><span class="value">${esc(p.age||"-")}</span></div>
-      <div class="patient-cell"><span class="label">লিঙ্গ</span><span class="value">${esc(p.gender||"-")}</span></div>
-      <div class="patient-cell"><span class="label">মোবাইল</span><span class="value">${esc(p.phone||"-")}</span></div>
-      <div class="patient-cell"><span class="label">PATIENT ID</span><span class="value">${esc(p.id||"-")}</span></div>
-    </div>
-  </section>
-
-  <main class="body-grid">
-    <aside class="left-col">
-      <div class="box">
-        <div class="box-title">CC — Chief Complaints</div>
-        <div class="box-body">${esc(v.symptoms||"-")}</div>
-      </div>
-
-      <div class="box">
-        <div class="box-title">O/E — On Examination</div>
-        <div class="box-body">
-          <div class="vitals">
-            <div class="vital"><b>BP</b><br>${esc(v.bp||"-")}</div>
-            <div class="vital"><b>Temp.</b><br>${esc(v.temperature||"-")}</div>
-            <div class="vital"><b>Weight</b><br>${esc(v.weight||"-")}</div>
-            <div class="vital"><b>Gender</b><br>${esc(p.gender||"-")}</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="box">
-        <div class="box-title">Diagnosis</div>
-        <div class="box-body">${esc(v.diagnosis||"-")}</div>
-      </div>
-
-      <div class="box">
-        <div class="box-title">Investigation</div>
-        <div class="box-body">${esc(v.investigation||"-")}</div>
-      </div>
-
-      <div class="box">
-        <div class="box-title">Advice</div>
-        <div class="box-body">${esc(v.advice||"-")}</div>
-      </div>
-
-      <div class="box">
-        <div class="box-title">Follow-up</div>
-        <div class="box-body"><strong>${esc(v.followUp||"-")}</strong></div>
-      </div>
-    </aside>
-
-    <section class="right-col">
-      <div class="rx-title">℞</div>
-      <div class="rx-sub">PRESCRIPTION / MEDICINES</div>
-      <table>
-        <thead><tr><th>#</th><th>Medicine</th><th>Frequency</th><th>Food</th><th>Duration</th></tr></thead>
-        <tbody>${medRows || '<tr><td colspan="5" style="text-align:center;color:#64748b">No medicine added</td></tr>'}</tbody>
-      </table>
-
-      <div class="signature">
-        <div class="signature-box">
-          <div class="signature-line"></div>
-          <strong>${esc(profile.name||"-")}</strong><br>${esc(profile.degree||"")}
-        </div>
-      </div>
-    </section>
-  </main>
-
-  <footer class="footer">
-    <span><strong>${esc(profile.clinic||"-")}</strong> • Prescription</span>
-    <span>Patient ID: ${esc(p.id||"-")}</span>
-  </footer>
+<div style="text-align:center;border-bottom:2px solid #111;padding-bottom:12px;margin-bottom:16px">
+  <div style="font-size:24px;font-weight:700">${esc(pr.name)}</div>
+  ${pr.degree?`<div style="font-size:15px;font-weight:600">${esc(pr.degree)}</div>`:""}
+  ${phones?`<div style="font-size:14px">${esc(phones)}</div>`:""}
+  ${pr.address?`<div style="font-size:14px">${esc(pr.address)}</div>`:""}
 </div>
+<div class="sub" style="font-size:18px;font-weight:700">${esc(pr.clinic)} — Prescription</div>
+<div class="box">
+<b>Patient:</b> ${esc(p.name)}<br>
+<b>Patient ID:</b> ${esc(p.id)}<br>
+<b>Age:</b> ${esc(p.age||"-")} &nbsp; <b>Gender:</b> ${esc(p.gender||"-")}<br>
+<b>Phone:</b> ${esc(p.phone)}<br>
+<b>Date:</b> ${new Date(v.date).toLocaleDateString()}
+</div>
+<p><b>Diagnosis:</b> ${esc(v.diagnosis||"-")}</p>
+<p><b>Symptoms:</b> ${esc(v.symptoms||"-")}</p>
+<p><b>BP:</b> ${esc(v.bp||"-")} &nbsp; <b>Temperature:</b> ${esc(v.temperature||"-")} &nbsp; <b>Weight:</b> ${esc(v.weight||"-")}</p>
+<h3>Medicines</h3>
+<table><thead><tr><th>#</th><th>Medicine</th><th>Frequency</th><th>Food</th><th>Duration</th></tr></thead>
+<tbody>${medRows || '<tr><td colspan="5">No medicine added</td></tr>'}</tbody></table>
+<p style="margin-top:25px"><b>Doctor's Advice:</b><br>${esc(v.advice||"-").replace(/\n/g,"<br>")}</p>
+<div class="sig">Doctor's Signature<br><br>______________________</div>
+<script>window.onload=function(){setTimeout(function(){window.print()},300)}<\/script>
+
+<script>
+/* ===== Mariyam Shebaloy: IndexedDB medicine catalogue ===== */
+const MED_DB_NAME = "MariyamShebaloyMedicineDB";
+const MED_DB_VERSION = 1;
+const MED_STORE = "medicines";
+let medDb = null;
+let medMode = "brand";
+let medLetter = "";
+
+function openMedDB(){
+  return new Promise((resolve,reject)=>{
+    if(medDb) return resolve(medDb);
+    const req=indexedDB.open(MED_DB_NAME, MED_DB_VERSION);
+    req.onupgradeneeded=()=>{
+      const db=req.result;
+      if(!db.objectStoreNames.contains(MED_STORE)){
+        const st=db.createObjectStore(MED_STORE,{keyPath:"id"});
+        st.createIndex("brand","brandName",{unique:false});
+        st.createIndex("generic","genericName",{unique:false});
+      }
+    };
+    req.onsuccess=()=>{medDb=req.result;resolve(medDb)};
+    req.onerror=()=>reject(req.error);
+  });
+}
+function medPutAll(items){
+  return openMedDB().then(db=>new Promise((resolve,reject)=>{
+    const tx=db.transaction(MED_STORE,"readwrite"), st=tx.objectStore(MED_STORE);
+    for(const raw of items){
+      const m=normalizeDGDA(raw);
+      if(m.id) st.put(m);
+    }
+    tx.oncomplete=resolve; tx.onerror=()=>reject(tx.error);
+  }));
+}
+function normalizeDGDA(m){
+  const raw=m.raw||{};
+  const ex=raw.extras||{};
+  return {
+    id:String(m.id||raw.id||uid("M-")),
+    brandName:String(m.brandName||m.name||raw.display_name||ex.trade_name||"").trim(),
+    genericName:String(m.genericName||m.generic||ex.generic_content_raw||"").trim(),
+    manufacturer:String(m.manufacturer||ex.company||"").trim(),
+    strength:String(m.strength||"").trim(),
+    dosageForm:String(m.dosageForm||m.form||ex.dosage_form||"").trim(),
+    description:String(m.description||"").trim(),
+    darNumber:String(m.darNumber||ex.dar_number||"").trim(),
+    registrationStatus:String(m.registrationStatus||"").trim(),
+    country:String(m.country||"Bangladesh").trim(),
+    source:String(m.source||"DGHS National OCL / DGDA").trim(),
+    raw:raw
+  };
+}
+function medGetAll(){
+  return openMedDB().then(db=>new Promise((resolve,reject)=>{
+    const req=db.transaction(MED_STORE,"readonly").objectStore(MED_STORE).getAll();
+    req.onsuccess=()=>resolve(req.result||[]);
+    req.onerror=()=>reject(req.error);
+  }));
+}
+function medGet(id){
+  return openMedDB().then(db=>new Promise((resolve,reject)=>{
+    const req=db.transaction(MED_STORE,"readonly").objectStore(MED_STORE).get(id);
+    req.onsuccess=()=>resolve(req.result);
+    req.onerror=()=>reject(req.error);
+  }));
+}
+function medCount(){
+  return openMedDB().then(db=>new Promise((resolve,reject)=>{
+    const req=db.transaction(MED_STORE,"readonly").objectStore(MED_STORE).count();
+    req.onsuccess=()=>resolve(req.result);
+    req.onerror=()=>reject(req.error);
+  }));
+}
+function importMedicineDatabase(input){
+  const file=input.files?.[0]; if(!file)return;
+  const reader=new FileReader();
+  reader.onload=async function(){
+    try{
+      const db=JSON.parse(reader.result);
+      if(!Array.isArray(db)) throw new Error("Invalid database");
+      toast("Importing "+db.length.toLocaleString()+" medicines…");
+      await medPutAll(db);
+      renderMedicines();
+      toast(db.length.toLocaleString()+" medicines imported");
+    }catch(e){
+      console.error(e); toast("Medicine database import failed");
+    }
+    input.value="";
+  };
+  reader.readAsText(file);
+}
+async function medicineOptions(selected=""){
+  const db=await medGetAll();
+  const arr=db.sort((a,b)=>a.brandName.localeCompare(b.brandName));
+  return arr.map(m=>`<option value="${esc(m.id)}" ${m.id===selected?"selected":""}>${esc(m.brandName)}${m.strength?" "+esc(m.strength):""}${m.genericName?" — "+esc(m.genericName):""}</option>`).join("");
+}
+async function addMedicineRow(data={}){
+  const row=document.createElement("div");
+  row.className="medicine-row"; row.dataset.type="database";
+  row.innerHTML=`<div class="medicine-grid">
+    <select class="med-select"><option value="">Loading medicines…</option></select>
+    <input class="med-frequency" placeholder="Frequency" value="${esc(data.frequency||"")}">
+    <select class="med-food"><option value="">Food</option><option>Before food</option><option>After food</option><option>With food</option><option>Any time</option></select>
+    <input class="med-duration" placeholder="Duration" value="${esc(data.duration||"")}">
+  </div><button class="btn danger" style="margin-top:8px" onclick="this.parentElement.remove()">Remove</button>`;
+  document.getElementById("visitMedicines").appendChild(row);
+  row.querySelector(".med-select").innerHTML='<option value="">Select medicine</option>'+await medicineOptions(data.medicineId||"");
+  if(data.food) row.querySelector(".med-food").value=data.food;
+}
+async function addTemplateMedicineRow(data={}){
+  const row=document.createElement("div"); row.className="medicine-row";
+  row.innerHTML=`<div class="medicine-grid">
+    <select class="tpl-med-select"><option value="">Loading medicines…</option></select>
+    <input class="tpl-med-frequency" placeholder="Frequency" value="${esc(data.frequency||"")}">
+    <select class="tpl-med-food"><option value="">Food</option><option>Before food</option><option>After food</option><option>With food</option><option>Any time</option></select>
+    <input class="tpl-med-duration" placeholder="Duration" value="${esc(data.duration||"")}">
+  </div><button class="btn danger" style="margin-top:8px" onclick="this.parentElement.remove()">Remove</button>`;
+  document.getElementById("templateMedicines").appendChild(row);
+  row.querySelector(".tpl-med-select").innerHTML='<option value="">Select medicine</option>'+await medicineOptions(data.medicineId||"");
+  if(data.medicineId) row.querySelector(".tpl-med-select").value=data.medicineId;
+  if(data.food) row.querySelector(".tpl-med-food").value=data.food;
+}
+async function openMedicineDetail(id){
+  const m=await medGet(id);
+  if(!m)return;
+  const ex=m.raw?.extras||{};
+  const field=(label,val)=>`<div class="list-item"><b>${label}</b><p>${esc(val||"Not available").replace(/\n/g,"<br>")}</p></div>`;
+  const box=document.getElementById("medicineDetailBox");
+  box.innerHTML=`<div class="row"><div><h2 class="section-title">${esc(m.brandName)}</h2><div class="small"><b>Generic:</b> ${esc(m.genericName||"Not available")}</div></div><button class="btn secondary" onclick="showPage('medicines')">← Back</button></div>
+  <div class="mdb-detail-grid">
+    ${field("Manufacturer",m.manufacturer)}
+    ${field("Strength",m.strength)}
+    ${field("Dosage Form",m.dosageForm)}
+    ${field("DAR Number",m.darNumber)}
+    ${field("Registration Status",m.registrationStatus)}
+    ${field("Country",m.country)}
+  </div>
+  ${field("Description",m.description)}
+  ${field("DGDA Trade Name",ex.trade_name)}
+  ${field("DGDA Generic Content",ex.generic_content_raw)}
+  ${field("DGDA Company",ex.company)}
+  ${field("DGDA Dosage Form",ex.dosage_form)}
+  ${field("Source",m.source)}
+  <div class="notice">Prescription-এ এই medicine-এর জন্য শুধু Brand Name ব্যবহার করা হবে; Generic Name database details-এ থাকবে।</div>`;
+  showPage("medicineDetail");
+}
+function sortMedicineMode(mode){medMode=mode;medLetter="";renderMedicines();}
+function clearMedicineFilter(){document.getElementById("medicineSearch").value="";medLetter="";renderMedicines();}
+async function renderMedicines(){
+  const box=document.getElementById("medicineList"); if(!box)return;
+  const all=await medGetAll();
+  const q=(document.getElementById("medicineSearch")?.value||"").toLowerCase().trim();
+  let list=all.filter(m=>{
+    const hay=[m.brandName,m.genericName,m.manufacturer,m.darNumber,m.dosageForm].join(" ").toLowerCase();
+    return !q || hay.includes(q);
+  });
+  if(medLetter) list=list.filter(m=>(m.brandName||"").toUpperCase().startsWith(medLetter));
+  list.sort((a,b)=>{
+    const aa=(medMode==="generic"?a.genericName:a.brandName)||"";
+    const bb=(medMode==="generic"?b.genericName:b.brandName)||"";
+    return aa.localeCompare(bb);
+  });
+  document.getElementById("medicineCount").textContent=`${list.length.toLocaleString()} shown • ${all.length.toLocaleString()} total`;
+  const letters="ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
+  document.getElementById("medicineLetterBar").innerHTML=letters.map(l=>`<button class="mdb-letter ${medLetter===l?"active":""}" onclick="medLetter='${l}';renderMedicines()">${l}</button>`).join("");
+  const LIMIT=100;
+  const shown=list.slice(0,LIMIT);
+  box.innerHTML=shown.length?shown.map(m=>`<div class="mdb-card"><div class="row"><div style="flex:1"><b>${esc(m.brandName||"Unnamed")}</b>${m.strength?" "+esc(m.strength):""}<div class="mdb-meta"><b>Generic:</b> ${esc(m.genericName||"Not available")} ${m.manufacturer?"• "+esc(m.manufacturer):""} ${m.dosageForm?"• "+esc(m.dosageForm):""}</div>${m.darNumber?`<div class="mdb-meta">DAR: ${esc(m.darNumber)}</div>`:""}</div><button class="btn primary" onclick="openMedicineDetail('${esc(m.id)}')">View Details</button></div></div>`).join(""):`<div class="empty">No medicines found.</div>`;
+  if(list.length>LIMIT) box.innerHTML+=`<div class="small" style="text-align:center;padding:12px">Showing first ${LIMIT}. Search more specifically to narrow the result.</div>`;
+}
+async function loadMedicineDatabase(){
+  // The 100MB JSON is selected manually to avoid file:// fetch/CORS issues.
+  try{ await openMedDB(); const c=await medCount(); if(c) renderMedicines(); }catch(e){console.error(e);}
+}
+</script>
+<script>
+if("serviceWorker" in navigator && location.protocol !== "file:"){
+  window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js").catch(()=>{}));
+}
+</script>
 </body></html>`;
 
   const w=window.open("","_blank");
   if(!w){toast("Browser popup blocked. Allow popups.");return;}
   w.document.open(); w.document.write(html); w.document.close();
 }
+
 
 function updateBackupPatientSelect(){
   const sel=document.getElementById("patientBackupSelect");
@@ -1519,18 +1322,18 @@ function importPatientFile(input){
 function backupAll(){
   const data={
     app:"Mariyam Shebaloy",
-    version:6,
+    version:4,
     exportedAt:new Date().toISOString(),
-    profile:profile,
     patients:patients,
     customMedicines:medicines.filter(m=>m.custom===true || m.source==="User added"),
-    templates:templates
+    templates:templates,
+    profile:getProfile()
   };
   const blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"});
   const url=URL.createObjectURL(blob);
   const a=document.createElement("a");
   const d=new Date().toISOString().slice(0,10);
-  a.href=url;a.download="mariyam-shebaloy-backup-"+d+".json";
+  a.href=url;a.download="myclinic-backup-"+d+".json";
   document.body.appendChild(a);a.click();a.remove();
   URL.revokeObjectURL(url);
   toast("Full backup created");
@@ -1567,11 +1370,6 @@ function restoreAll(input){
         renderPatients();
         toast("Patient restored");
       } else if(data.app==="Mariyam Shebaloy" && Array.isArray(data.patients)){
-        if(data.profile){
-          profile={...DEFAULT_PROFILE,...data.profile};
-          save(KEY_PROFILE,profile);
-          applyProfileToHeader();
-        }
         const map=new Map(patients.map(p=>[p.id,p]));
         data.patients.forEach(p=>map.set(p.id,p));
         patients=[...map.values()];
@@ -1586,6 +1384,12 @@ function restoreAll(input){
           const tm=new Map(templates.map(t=>[t.id,t]));
           data.templates.forEach(t=>tm.set(t.id,t));
           templates=[...tm.values()];
+        }
+
+        if(data.profile && typeof data.profile==="object"){
+          profile={...DEFAULT_PROFILE,...data.profile};
+          save(KEY_PROFILE,profile);
+          updateBranding();
         }
 
         save(KEY_PATIENTS,patients);
@@ -1614,8 +1418,9 @@ function clearAllData(){
   localStorage.removeItem(KEY_MEDICINES);
   localStorage.removeItem(KEY_TEMPLATES);
   localStorage.removeItem(KEY_PROFILE);
-  patients=[];medicines=[];templates=[];profile={...DEFAULT_PROFILE};
-  applyProfileToHeader();
+  patients=[];medicines=[];templates=[];
+  profile={...DEFAULT_PROFILE};
+  updateBranding();
   updateBackupPatientSelect();
   renderPatients();renderMedicines();renderTemplates();fillDiseaseList();
   toast("All local data deleted");
@@ -1844,7 +1649,6 @@ function resetMedicineForm(){
 }
 
 async function loadMedicineDatabase(){
-  const status=document.getElementById("medicineDbStatus");
   try{
     const db=await getAllDGDA();
     dgdaMedicines=db.map(normalizeMedicine);
@@ -1852,49 +1656,200 @@ async function loadMedicineDatabase(){
     medicines=[...custom,...dgdaMedicines];
     dedupeMedicinesInMemory();
     medicineDbReady=dgdaMedicines.length>0;
-    if(status) status.innerHTML=medicineDbReady
-      ? `✅ DGDA medicine database ready: <b>${dgdaMedicines.length.toLocaleString()}</b> medicines. You can search by brand/generic/manufacturer/DAR number.`
-      : `⚠️ DGDA database is not loaded yet. Tap <b>Load medicines.json</b> and select your 39,195-record file.`;
     renderMedicines();
+    toast(medicineDbReady?`DGDA database ready: ${dgdaMedicines.length.toLocaleString()} medicines`:"DGDA database not imported yet");
   }catch(e){
     console.warn("DGDA IndexedDB load failed",e);
     medicines=load(KEY_MEDICINES,[]).filter(m=>m.custom===true || m.source==="User added");
-    if(status) status.innerHTML=`⚠️ Database not loaded. Tap <b>Load medicines.json</b> to import it.`;
     renderMedicines();
   }
-}
-
-// Register service worker so Chrome can recognize and control the PWA.
-if ("serviceWorker" in navigator) {
-  window.addEventListener("load", () => {
-    navigator.serviceWorker.register("/Mariyam-Shebaloy/sw.js", {scope: "/Mariyam-Shebaloy/"})
-      .then(reg => {
-        if (reg.waiting) reg.waiting.postMessage({type:"SKIP_WAITING"});
-      })
-      .catch(err => console.warn("Service worker registration failed:", err));
-  });
 }
 
 fillDiseaseList();
 renderTemplates();
 renderPatients();
-
-document.addEventListener("click",function(e){
-  document.querySelectorAll(".investigation-menu,.autocomplete-menu").forEach(menu=>{
-    const wrap=menu.parentElement;
-    if(wrap && !wrap.contains(e.target)) menu.classList.add("hidden");
-  });
-  const btn=e.target.closest(".remove-investigation");
-  if(btn){
-    const inputId=btn.dataset.input;
-    const index=Number(btn.dataset.index);
-    removeInvestigation(inputId,index);
-  }
-},true);
+updateBranding();
+loadProfileForm();
+renderDashboardStats();
 updateBackupPatientSelect();
-applyProfileToHeader();
 loadMedicineDatabase();
 </script>
 
+<script>
+/* ===== Mariyam Shebaloy: IndexedDB medicine catalogue ===== */
+const MED_DB_NAME = "MariyamShebaloyMedicineDB";
+const MED_DB_VERSION = 1;
+const MED_STORE = "medicines";
+let medDb = null;
+let medMode = "brand";
+let medLetter = "";
+
+function openMedDB(){
+  return new Promise((resolve,reject)=>{
+    if(medDb) return resolve(medDb);
+    const req=indexedDB.open(MED_DB_NAME, MED_DB_VERSION);
+    req.onupgradeneeded=()=>{
+      const db=req.result;
+      if(!db.objectStoreNames.contains(MED_STORE)){
+        const st=db.createObjectStore(MED_STORE,{keyPath:"id"});
+        st.createIndex("brand","brandName",{unique:false});
+        st.createIndex("generic","genericName",{unique:false});
+      }
+    };
+    req.onsuccess=()=>{medDb=req.result;resolve(medDb)};
+    req.onerror=()=>reject(req.error);
+  });
+}
+function medPutAll(items){
+  return openMedDB().then(db=>new Promise((resolve,reject)=>{
+    const tx=db.transaction(MED_STORE,"readwrite"), st=tx.objectStore(MED_STORE);
+    for(const raw of items){
+      const m=normalizeDGDA(raw);
+      if(m.id) st.put(m);
+    }
+    tx.oncomplete=resolve; tx.onerror=()=>reject(tx.error);
+  }));
+}
+function normalizeDGDA(m){
+  const raw=m.raw||{};
+  const ex=raw.extras||{};
+  return {
+    id:String(m.id||raw.id||uid("M-")),
+    brandName:String(m.brandName||m.name||raw.display_name||ex.trade_name||"").trim(),
+    genericName:String(m.genericName||m.generic||ex.generic_content_raw||"").trim(),
+    manufacturer:String(m.manufacturer||ex.company||"").trim(),
+    strength:String(m.strength||"").trim(),
+    dosageForm:String(m.dosageForm||m.form||ex.dosage_form||"").trim(),
+    description:String(m.description||"").trim(),
+    darNumber:String(m.darNumber||ex.dar_number||"").trim(),
+    registrationStatus:String(m.registrationStatus||"").trim(),
+    country:String(m.country||"Bangladesh").trim(),
+    source:String(m.source||"DGHS National OCL / DGDA").trim(),
+    raw:raw
+  };
+}
+function medGetAll(){
+  return openMedDB().then(db=>new Promise((resolve,reject)=>{
+    const req=db.transaction(MED_STORE,"readonly").objectStore(MED_STORE).getAll();
+    req.onsuccess=()=>resolve(req.result||[]);
+    req.onerror=()=>reject(req.error);
+  }));
+}
+function medGet(id){
+  return openMedDB().then(db=>new Promise((resolve,reject)=>{
+    const req=db.transaction(MED_STORE,"readonly").objectStore(MED_STORE).get(id);
+    req.onsuccess=()=>resolve(req.result);
+    req.onerror=()=>reject(req.error);
+  }));
+}
+function medCount(){
+  return openMedDB().then(db=>new Promise((resolve,reject)=>{
+    const req=db.transaction(MED_STORE,"readonly").objectStore(MED_STORE).count();
+    req.onsuccess=()=>resolve(req.result);
+    req.onerror=()=>reject(req.error);
+  }));
+}
+function importMedicineDatabase(input){
+  const file=input.files?.[0]; if(!file)return;
+  const reader=new FileReader();
+  reader.onload=async function(){
+    try{
+      const db=JSON.parse(reader.result);
+      if(!Array.isArray(db)) throw new Error("Invalid database");
+      toast("Importing "+db.length.toLocaleString()+" medicines…");
+      await medPutAll(db);
+      renderMedicines();
+      toast(db.length.toLocaleString()+" medicines imported");
+    }catch(e){
+      console.error(e); toast("Medicine database import failed");
+    }
+    input.value="";
+  };
+  reader.readAsText(file);
+}
+async function medicineOptions(selected=""){
+  const db=await medGetAll();
+  const arr=db.sort((a,b)=>a.brandName.localeCompare(b.brandName));
+  return arr.map(m=>`<option value="${esc(m.id)}" ${m.id===selected?"selected":""}>${esc(m.brandName)}${m.strength?" "+esc(m.strength):""}${m.genericName?" — "+esc(m.genericName):""}</option>`).join("");
+}
+async function addMedicineRow(data={}){
+  const row=document.createElement("div");
+  row.className="medicine-row"; row.dataset.type="database";
+  row.innerHTML=`<div class="medicine-grid">
+    <select class="med-select"><option value="">Loading medicines…</option></select>
+    <input class="med-frequency" placeholder="Frequency" value="${esc(data.frequency||"")}">
+    <select class="med-food"><option value="">Food</option><option>Before food</option><option>After food</option><option>With food</option><option>Any time</option></select>
+    <input class="med-duration" placeholder="Duration" value="${esc(data.duration||"")}">
+  </div><button class="btn danger" style="margin-top:8px" onclick="this.parentElement.remove()">Remove</button>`;
+  document.getElementById("visitMedicines").appendChild(row);
+  row.querySelector(".med-select").innerHTML='<option value="">Select medicine</option>'+await medicineOptions(data.medicineId||"");
+  if(data.food) row.querySelector(".med-food").value=data.food;
+}
+async function addTemplateMedicineRow(data={}){
+  const row=document.createElement("div"); row.className="medicine-row";
+  row.innerHTML=`<div class="medicine-grid">
+    <select class="tpl-med-select"><option value="">Loading medicines…</option></select>
+    <input class="tpl-med-frequency" placeholder="Frequency" value="${esc(data.frequency||"")}">
+    <select class="tpl-med-food"><option value="">Food</option><option>Before food</option><option>After food</option><option>With food</option><option>Any time</option></select>
+    <input class="tpl-med-duration" placeholder="Duration" value="${esc(data.duration||"")}">
+  </div><button class="btn danger" style="margin-top:8px" onclick="this.parentElement.remove()">Remove</button>`;
+  document.getElementById("templateMedicines").appendChild(row);
+  row.querySelector(".tpl-med-select").innerHTML='<option value="">Select medicine</option>'+await medicineOptions(data.medicineId||"");
+  if(data.medicineId) row.querySelector(".tpl-med-select").value=data.medicineId;
+  if(data.food) row.querySelector(".tpl-med-food").value=data.food;
+}
+async function openMedicineDetail(id){
+  const m=await medGet(id);
+  if(!m)return;
+  const ex=m.raw?.extras||{};
+  const field=(label,val)=>`<div class="list-item"><b>${label}</b><p>${esc(val||"Not available").replace(/\n/g,"<br>")}</p></div>`;
+  const box=document.getElementById("medicineDetailBox");
+  box.innerHTML=`<div class="row"><div><h2 class="section-title">${esc(m.brandName)}</h2><div class="small"><b>Generic:</b> ${esc(m.genericName||"Not available")}</div></div><button class="btn secondary" onclick="showPage('medicines')">← Back</button></div>
+  <div class="mdb-detail-grid">
+    ${field("Manufacturer",m.manufacturer)}
+    ${field("Strength",m.strength)}
+    ${field("Dosage Form",m.dosageForm)}
+    ${field("DAR Number",m.darNumber)}
+    ${field("Registration Status",m.registrationStatus)}
+    ${field("Country",m.country)}
+  </div>
+  ${field("Description",m.description)}
+  ${field("DGDA Trade Name",ex.trade_name)}
+  ${field("DGDA Generic Content",ex.generic_content_raw)}
+  ${field("DGDA Company",ex.company)}
+  ${field("DGDA Dosage Form",ex.dosage_form)}
+  ${field("Source",m.source)}
+  <div class="notice">Prescription-এ এই medicine-এর জন্য শুধু Brand Name ব্যবহার করা হবে; Generic Name database details-এ থাকবে।</div>`;
+  showPage("medicineDetail");
+}
+function sortMedicineMode(mode){medMode=mode;medLetter="";renderMedicines();}
+function clearMedicineFilter(){document.getElementById("medicineSearch").value="";medLetter="";renderMedicines();}
+async function renderMedicines(){
+  const box=document.getElementById("medicineList"); if(!box)return;
+  const all=await medGetAll();
+  const q=(document.getElementById("medicineSearch")?.value||"").toLowerCase().trim();
+  let list=all.filter(m=>{
+    const hay=[m.brandName,m.genericName,m.manufacturer,m.darNumber,m.dosageForm].join(" ").toLowerCase();
+    return !q || hay.includes(q);
+  });
+  if(medLetter) list=list.filter(m=>(m.brandName||"").toUpperCase().startsWith(medLetter));
+  list.sort((a,b)=>{
+    const aa=(medMode==="generic"?a.genericName:a.brandName)||"";
+    const bb=(medMode==="generic"?b.genericName:b.brandName)||"";
+    return aa.localeCompare(bb);
+  });
+  document.getElementById("medicineCount").textContent=`${list.length.toLocaleString()} shown • ${all.length.toLocaleString()} total`;
+  const letters="ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
+  document.getElementById("medicineLetterBar").innerHTML=letters.map(l=>`<button class="mdb-letter ${medLetter===l?"active":""}" onclick="medLetter='${l}';renderMedicines()">${l}</button>`).join("");
+  const LIMIT=100;
+  const shown=list.slice(0,LIMIT);
+  box.innerHTML=shown.length?shown.map(m=>`<div class="mdb-card"><div class="row"><div style="flex:1"><b>${esc(m.brandName||"Unnamed")}</b>${m.strength?" "+esc(m.strength):""}<div class="mdb-meta"><b>Generic:</b> ${esc(m.genericName||"Not available")} ${m.manufacturer?"• "+esc(m.manufacturer):""} ${m.dosageForm?"• "+esc(m.dosageForm):""}</div>${m.darNumber?`<div class="mdb-meta">DAR: ${esc(m.darNumber)}</div>`:""}</div><button class="btn primary" onclick="openMedicineDetail('${esc(m.id)}')">View Details</button></div></div>`).join(""):`<div class="empty">No medicines found.</div>`;
+  if(list.length>LIMIT) box.innerHTML+=`<div class="small" style="text-align:center;padding:12px">Showing first ${LIMIT}. Search more specifically to narrow the result.</div>`;
+}
+async function loadMedicineDatabase(){
+  // The 100MB JSON is selected manually to avoid file:// fetch/CORS issues.
+  try{ await openMedDB(); const c=await medCount(); if(c) renderMedicines(); }catch(e){console.error(e);}
+}
+</script>
 </body>
 </html>
