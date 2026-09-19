@@ -1,50 +1,27 @@
-const CACHE_NAME = 'mariyam-shebaloy-pwa-v6-3';
-const BASE = '/Mariyam-Shebaloy/';
-const APP_SHELL = [
-  BASE,
-  BASE + 'index.html',
-  BASE + 'manifest.json',
-  BASE + 'icons/icon-192.png',
-  BASE + 'icons/icon-512.png'
-];
+const CACHE_NAME = "mariyam-shebaloy-v6-4";
+const BASE = "/Mariyam-Shebaloy/";
+const APP_SHELL = [BASE, BASE + "index.html", BASE + "manifest.json", BASE + "icon-192.png", BASE + "icon-512.png"];
 
-self.addEventListener('install', event => {
-  event.waitUntil(
-    caches.open(CACHE_NAME)
-      .then(cache => cache.addAll(APP_SHELL))
-      .then(() => self.skipWaiting())
-  );
+self.addEventListener("install", event => {
+  event.waitUntil(caches.open(CACHE_NAME).then(cache => cache.addAll(APP_SHELL)).then(() => self.skipWaiting()));
 });
 
-self.addEventListener('activate', event => {
-  event.waitUntil(
-    caches.keys()
-      .then(keys => Promise.all(
-        keys.filter(key => key !== CACHE_NAME).map(key => caches.delete(key))
-      ))
-      .then(() => self.clients.claim())
-  );
+self.addEventListener("activate", event => {
+  event.waitUntil(caches.keys().then(keys => Promise.all(keys.filter(k => k !== CACHE_NAME).map(k => caches.delete(k)))).then(() => self.clients.claim()));
 });
 
-self.addEventListener('message', event => {
-  if (event.data && event.data.type === 'SKIP_WAITING') self.skipWaiting();
-});
-
-self.addEventListener('fetch', event => {
-  if (event.request.method !== 'GET') return;
+self.addEventListener("fetch", event => {
+  if (event.request.method !== "GET") return;
   const url = new URL(event.request.url);
-  if (url.origin !== self.location.origin) return;
-  if (!url.pathname.startsWith(BASE)) return;
-
-  event.respondWith(
-    fetch(event.request)
-      .then(response => {
-        if (response && response.status === 200 && response.type === 'basic') {
-          const copy = response.clone();
-          caches.open(CACHE_NAME).then(cache => cache.put(event.request, copy));
-        }
-        return response;
-      })
-      .catch(() => caches.match(event.request).then(cached => cached || caches.match(BASE + 'index.html')))
-  );
+  if (url.origin !== self.location.origin || !url.pathname.startsWith(BASE)) return;
+  event.respondWith(caches.match(event.request).then(cached => {
+    if (cached) return cached;
+    return fetch(event.request).then(response => {
+      if (response && response.status === 200 && response.type === "basic") {
+        const copy = response.clone();
+        caches.open(CACHE_NAME).then(cache => cache.put(event.request, copy));
+      }
+      return response;
+    }).catch(() => caches.match(BASE + "index.html"));
+  }));
 });
