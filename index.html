@@ -1,0 +1,1889 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#2563eb">
+<link rel="manifest" href="./manifest.json">
+<link rel="icon" type="image/png" sizes="192x192" href="./icons/icon-192.png">
+<link rel="apple-touch-icon" href="./icons/icon-192.png">
+<title>Mariyam Shebaloy — Personal Clinic Management System — V6</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,"Noto Sans Bengali",sans-serif;background:#f4f7fb;color:#1f2937}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer;border:0}
+.header{background:#2563eb;color:#fff;padding:28px 20px 34px;border-radius:0 0 28px 28px}
+.header h1{margin:0 0 8px;font-size:32px}.header p{margin:0;opacity:.9}
+.container{max-width:900px;margin:auto;padding:20px}
+.card{background:#fff;border-radius:18px;padding:20px;margin-bottom:18px;box-shadow:0 5px 20px #0000000d}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+@media(max-width:650px){.grid,.grid3{grid-template-columns:1fr}}
+label{display:block;font-weight:700;margin:8px 0 6px}
+input,select,textarea{width:100%;padding:12px;border:1px solid #d1d5db;border-radius:10px;background:#fff}
+textarea{min-height:90px;resize:vertical}
+.btn{padding:12px 16px;border-radius:10px;font-weight:700;margin:4px 4px 4px 0}
+.primary{background:#2563eb;color:#fff}.secondary{background:#e5e7eb;color:#111827}
+.danger{background:#dc2626;color:#fff}.success{background:#16a34a;color:#fff}
+.section-title{margin:4px 0 14px;font-size:22px}
+.hidden{display:none!important}
+.search{font-size:17px;padding:15px}
+.quick{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+.stat-box{border:1px solid #e5e7eb;border-radius:14px;padding:16px;text-align:center;background:#f8fafc}
+.stat-number{font-size:28px;font-weight:800;color:#2563eb;line-height:1.1}
+.stat-label{font-size:13px;font-weight:700;color:#475569;margin-top:7px}
+.quick .card{margin:0;min-height:120px}
+@media(max-width:600px){.quick{grid-template-columns:1fr 1fr}}
+.list-item{border:1px solid #e5e7eb;border-radius:12px;padding:14px;margin:9px 0}
+.badge{display:inline-block;padding:5px 9px;border-radius:20px;background:#dbeafe;color:#1d4ed8;font-size:12px;font-weight:700}
+.row{display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap}
+.small{font-size:13px;color:#6b7280}
+.medicine-row{border:1px solid #e5e7eb;border-radius:12px;padding:12px;margin:10px 0}
+.autocomplete-wrap{position:relative}
+.autocomplete-menu{position:absolute;left:0;right:0;top:100%;z-index:2000;background:#fff;border:1px solid #cbd5e1;border-radius:0 0 10px 10px;box-shadow:0 10px 24px rgba(15,23,42,.18);max-height:260px;overflow:auto}
+.autocomplete-item{padding:10px 12px;border-bottom:1px solid #eef2f7;cursor:pointer}
+.autocomplete-item:hover{background:#eff6ff}
+.autocomplete-item b{color:#0f4f4b}
+.autocomplete-meta{font-size:12px;color:#64748b;margin-top:2px}
+.investigation-wrap{position:relative}
+.investigation-menu{position:absolute;left:0;right:0;top:100%;z-index:1900;background:#fff;border:1px solid #cbd5e1;border-radius:0 0 10px 10px;box-shadow:0 10px 24px rgba(15,23,42,.18);max-height:240px;overflow:auto}
+.investigation-item{padding:9px 12px;border-bottom:1px solid #eef2f7;cursor:pointer}
+.investigation-item:hover{background:#eff6ff}
+.chip{display:inline-flex;align-items:center;gap:5px;background:#e0f2fe;color:#075985;border:1px solid #bae6fd;border-radius:18px;padding:5px 9px;margin:4px 4px 0 0;font-size:12px}
+.chip button{border:0;background:transparent;color:#075985;font-weight:800;cursor:pointer}
+.print-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+
+.medicine-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:8px}
+@media(max-width:700px){.medicine-grid{grid-template-columns:1fr 1fr}}
+hr{border:0;border-top:1px solid #e5e7eb;margin:18px 0}
+.empty{text-align:center;color:#6b7280;padding:25px}
+.notice{background:#fff7ed;border:1px solid #fed7aa;padding:12px;border-radius:10px;color:#9a3412;font-size:13px}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#111827;color:#fff;padding:12px 18px;border-radius:10px;display:none;z-index:99}
+
+/* Mariyam Shebaloy medicine database */
+.mdb-toolbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:10px 0}
+.mdb-toolbar .btn{margin:0}
+.mdb-count{font-size:13px;color:#6b7280}
+.mdb-letterbar{display:flex;gap:5px;flex-wrap:wrap;margin:10px 0}
+.mdb-letter{padding:7px 9px;border:1px solid #d1d5db;border-radius:8px;background:#fff;cursor:pointer;font-weight:700}
+.mdb-letter.active{background:#2563eb;color:#fff}
+.mdb-card{border:1px solid #e5e7eb;border-radius:12px;padding:12px;margin:8px 0}
+.mdb-meta{font-size:12px;color:#6b7280;margin-top:4px}
+.mdb-detail-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+@media(max-width:650px){.mdb-detail-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>Mariyam Shebaloy</h1>
+  <p>Personal Clinic Management System</p>
+</div>
+
+<div class="container">
+
+<!-- HOME -->
+<section id="home">
+  <div class="card">
+    <input id="globalSearch" class="search" placeholder="🔎 রোগীর নাম বা ফোন নম্বর দিয়ে খুঁজুন" oninput="searchPatients()">
+  </div>
+
+  <button class="btn primary" style="width:100%;font-size:18px" onclick="showPage('patientForm')">＋ New Patient</button>
+
+  <div class="card dashboard-stats-card" style="margin-top:18px">
+    <div class="row" style="margin-bottom:12px">
+      <h3 style="margin:0">📊 Dashboard Statistics</h3>
+      <span class="small">সর্বশেষ তথ্য</span>
+    </div>
+    <div class="grid3">
+      <div class="stat-box">
+        <div class="stat-number" id="statTodayPatients">0</div>
+        <div class="stat-label">আজকে দেখা রোগী</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-number" id="statTotalPatients">0</div>
+        <div class="stat-label">মোট রোগী</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-number" id="statTotalPrescriptions">0</div>
+        <div class="stat-label">মোট প্রেসক্রিপশন</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="quick" style="margin-top:18px">
+    <div class="card" onclick="showPage('patients')" style="cursor:pointer">
+      <h2>👥</h2><b>Patients</b><div class="small">রোগীর রেকর্ড দেখুন</div>
+    </div>
+    <div class="card" onclick="showPage('medicines')" style="cursor:pointer">
+      <h2>💊</h2><b>Medicines</b><div class="small">Medicine database</div>
+    </div>
+    <div class="card" onclick="showPage('prescriptions')" style="cursor:pointer">
+      <h2>📝</h2><b>Prescriptions</b><div class="small">Prescription তৈরি করুন</div>
+    </div>
+    <div class="card" onclick="showPage('history')" style="cursor:pointer">
+      <h2>📋</h2><b>Visit History</b><div class="small">Previous visits</div>
+    </div>
+    <div class="card" onclick="showPage('profile')" style="cursor:pointer">
+      <h2>👤</h2><b>Settings / Profile</b><div class="small">ডাক্তার ও ক্লিনিকের তথ্য পরিবর্তন করুন</div>
+    </div>
+  </div>
+  <button class="btn secondary" style="width:100%;margin-top:14px;font-size:16px" onclick="showPage('templates')">⚙️ Disease Templates</button>
+  <button class="btn secondary" style="width:100%;margin-top:10px;font-size:16px" onclick="showPage('backup')">💾 Backup & Restore</button>
+</section>
+
+
+
+<!-- SETTINGS / PROFILE -->
+<section id="profile" class="hidden">
+  <div class="card">
+    <div class="row">
+      <h2 class="section-title">👤 Settings / Profile</h2>
+      <button class="btn secondary" onclick="showPage('home')">← Home</button>
+    </div>
+    <div class="notice">এখানে আপনার ডাক্তার/ক্লিনিকের তথ্য পরিবর্তন করলে পরবর্তী নতুন ও সংরক্ষিত প্রেসক্রিপশন প্রিন্টে সেই তথ্য ব্যবহার হবে।</div>
+    <div class="grid">
+      <div><label>ডাক্তারের নাম *</label><input id="profileName" placeholder="MD YASHIN GAZI"></div>
+      <div><label>পদবি / ডিগ্রি</label><input id="profileDegree" placeholder="D.M.S, MCH"></div>
+      <div><label>মোবাইল নম্বর ১</label><input id="profilePhone1" inputmode="tel" placeholder="01795160443"></div>
+      <div><label>মোবাইল নম্বর ২</label><input id="profilePhone2" inputmode="tel" placeholder="01609027826"></div>
+      <div><label>ক্লিনিক / ফার্মেসির নাম *</label><input id="profileClinic" placeholder="Mariyam Shebaloy"></div>
+      <div><label>ঠিকানা</label><input id="profileAddress" placeholder="Pirojpur, Barobazar, Kaliganj, Jhenaidah"></div>
+    </div>
+    <button class="btn primary" style="margin-top:14px" onclick="saveProfile()">💾 Save Profile</button>
+    <button class="btn secondary" style="margin-top:14px" onclick="resetProfileDefaults()">↺ Default Information</button>
+  </div>
+</section>
+
+<!-- MEDICINE DETAIL -->
+<section id="medicineDetail" class="hidden">
+  <div class="card" id="medicineDetailBox"></div>
+</section>
+
+<!-- DISEASE TEMPLATES -->
+<section id="templates" class="hidden">
+  <div class="card">
+    <div class="row">
+      <h2 class="section-title">Disease Templates</h2>
+      <button class="btn secondary" onclick="showPage('home')">← Home</button>
+    </div>
+
+    <div class="notice">
+      এখানে শুধু আপনার নিজের clinically verified template সংরক্ষণ করুন। এই সিস্টেম নিজে থেকে কোনো রোগের জন্য ওষুধ নির্বাচন বা dose নির্ধারণ করে না। Template ব্যবহার করার পর prescription দেওয়ার আগে প্রতিটি medicine, frequency, food instruction ও duration নিজে review করবেন।
+    </div>
+
+    <label>Disease / Diagnosis Name *</label>
+    <input id="tDisease" placeholder="যেমন: আপনার ব্যবহৃত diagnosis-এর নাম">
+
+    <hr>
+    <div class="row">
+      <h3 style="margin:0">Template Medicines</h3>
+      <button class="btn secondary" onclick="addTemplateMedicineRow()">＋ Database Medicine</button><button class="btn secondary" onclick="addCustomTemplateMedicineRow()">＋ Custom Medicine</button>
+    </div>
+    <div id="templateMedicines"></div>
+
+    <label>Default Advice</label>
+    <textarea id="tAdvice" placeholder="এই diagnosis-এর জন্য আপনার নিজের default advice লিখতে পারেন"></textarea>
+
+    <button class="btn primary" onclick="saveTemplate()">Save Template</button>
+
+    <hr>
+    <h3>Saved Templates</h3>
+    <div id="templateList"></div>
+  </div>
+</section>
+
+
+<!-- BACKUP & RESTORE -->
+<section id="backup" class="hidden">
+  <div class="card">
+    <div class="row">
+      <h2 class="section-title">Backup & Restore</h2>
+      <button class="btn secondary" onclick="showPage('home')">← Home</button>
+    </div>
+
+    <div class="notice">
+      Patient, Visit, Medicine এবং Disease Template—সব data এই ফোনের browser Local Storage-এ থাকে। ফোন reset বা browser/app data clear হলে Local Storage মুছে যেতে পারে। তাই নিয়মিত backup রাখুন।
+    </div>
+
+    <h3>📦 Full Backup</h3>
+    <p class="small">সব Patient + Visit + Medicine + Disease Template একসাথে একটি JSON backup file হিসেবে সংরক্ষণ করুন।</p>
+    <button class="btn primary" onclick="backupAll()">⬇️ Backup All Data</button>
+
+    <hr>
+
+    <h3>📥 Restore</h3>
+    <p class="small">আগে তৈরি করা backup JSON file নির্বাচন করুন। Restore করলে বর্তমান data-এর সাথে backup data merge হবে; একই ID থাকলে backup-এর তথ্য ব্যবহার করা হবে।</p>
+    <input id="restoreFile" type="file" accept=".json,application/json" onchange="restoreAll(this)">
+
+    <hr>
+
+    <h3>👤 Patient File</h3>
+    <p class="small">একজন রোগীর সম্পূর্ণ profile + সব visit একটি আলাদা JSON file হিসেবে File Manager-এ save করতে পারবেন। নতুন ফোনে বা data হারালে একই file import করে রোগী ফিরিয়ে আনতে পারবেন।</p>
+    <select id="patientBackupSelect">
+      <option value="">Select Patient</option>
+    </select>
+    <br>
+    <button class="btn secondary" onclick="backupSinglePatient()">⬇️ Save Selected Patient File</button>
+
+    <label style="margin-top:14px">Import Patient File</label>
+    <input id="patientImportFile" type="file" accept=".json,application/json" onchange="importPatientFile(this)">
+
+    <hr>
+
+    <h3>⚠️ Data Management</h3>
+    <button class="btn danger" onclick="clearAllData()">Delete All Local Data</button>
+    <p class="small">এটি করলে Local Storage-এর সব patient, visit, medicine ও template মুছে যাবে। Backup না থাকলে ফিরিয়ে আনা যাবে না।</p>
+  </div>
+</section>
+
+<!-- PATIENT FORM -->
+<section id="patientForm" class="hidden">
+  <div class="card">
+    <div class="row"><h2 class="section-title" id="patientFormTitle">New Patient</h2><button class="btn secondary" onclick="showPage('home')">← Back</button></div>
+    <div class="grid">
+      <div><label>Patient Name *</label><input id="pName"></div>
+      <div><label>Phone Number *</label><input id="pPhone" inputmode="tel"></div>
+      <div><label>Age</label><input id="pAge" type="number" min="0"></div>
+      <div><label>Gender</label><select id="pGender"><option value="">Select</option><option>Male</option><option>Female</option><option>Other</option></select></div>
+      <div><label>Address</label><input id="pAddress"></div>
+      <div><label>Patient ID</label><input id="pId" placeholder="Auto generated" readonly></div>
+    </div>
+    <hr>
+    <h3>Initial Information</h3>
+    <div class="grid3">
+      <div><label>BP</label><input id="pBP" placeholder="120/80"></div>
+      <div><label>Temperature</label><input id="pTemp" placeholder="98.6 °F"></div>
+      <div><label>Weight</label><input id="pWeight" placeholder="kg"></div>
+    </div>
+    <label>Symptoms / Complaints</label><textarea id="pSymptoms"></textarea>
+    <label>Initial Diagnosis</label><input id="pDiagnosis">
+    <label>Initial Investigation / পরীক্ষা-নিরীক্ষা</label>
+    <div class="investigation-wrap">
+      <input id="pInvestigation" autocomplete="off" placeholder="পরীক্ষার নাম লিখুন বা suggestion থেকে নির্বাচন করুন">
+      <div id="pInvestigationMenu" class="investigation-menu hidden"></div>
+    </div>
+    <div id="pInvestigationTags" style="margin-bottom:8px"></div>
+
+    <hr>
+    <div class="row"><h3>Initial Medicines</h3><div><button class="btn secondary" onclick="addPatientMedicineRow()">＋ Database Medicine</button><button class="btn secondary" onclick="addPatientCustomMedicineRow()">＋ Custom Medicine</button></div></div>
+    <div id="patientMedicines"></div>
+
+    <label>Doctor's Advice</label><textarea id="pAdvice"></textarea>
+    <div class="notice" style="margin-top:12px">এই সফটওয়্যারটি রেকর্ড ও prescription management-এর জন্য। রোগ নির্ণয় বা ওষুধের dose স্বয়ংক্রিয়ভাবে নির্ধারণ করে না। Prescription দেওয়ার আগে clinical judgment ও স্থানীয় guideline যাচাই করুন।</div>
+    <button class="btn primary" id="patientSaveBtn" style="margin-top:14px" onclick="saveNewPatient()">Save Patient</button>
+  </div>
+</section>
+
+<!-- PATIENTS -->
+<section id="patients" class="hidden">
+  <div class="card">
+    <div class="row"><h2 class="section-title">Patients</h2><button class="btn secondary" onclick="showPage('home')">← Home</button></div>
+    <input id="patientListSearch" class="search" placeholder="নাম / ফোন / Patient ID" oninput="renderPatients()">
+    <div id="patientList"></div>
+  </div>
+</section>
+
+<!-- PATIENT DETAIL -->
+<section id="patientDetail" class="hidden">
+  <div class="card" id="patientDetailBox"></div>
+</section>
+
+<!-- NEW VISIT -->
+<section id="visitForm" class="hidden">
+  <div class="card">
+    <div class="row"><h2 class="section-title">New Visit</h2><button class="btn secondary" onclick="showPage('patients')">← Patients</button></div>
+    <div id="visitPatientInfo"></div>
+    <hr>
+    <h3>Visit Information</h3>
+    <div class="grid3">
+      <div><label>BP</label><input id="vBP"></div>
+      <div><label>Temperature</label><input id="vTemp"></div>
+      <div><label>Weight</label><input id="vWeight"></div>
+    </div>
+    <label>Symptoms / Complaints</label><textarea id="vSymptoms"></textarea>
+    <label>Diagnosis</label>
+    <input id="vDiagnosis" list="diseaseList" oninput="applyDiseaseTemplate()">
+    <datalist id="diseaseList"></datalist>
+
+    <label>Investigation / পরীক্ষা-নিরীক্ষা</label>
+    <div class="investigation-wrap">
+      <input id="vInvestigationInput" autocomplete="off" placeholder="পরীক্ষার নাম লিখুন বা suggestion থেকে নির্বাচন করুন">
+      <div id="vInvestigationMenu" class="investigation-menu hidden"></div>
+    </div>
+    <div id="vInvestigationTags" style="margin-bottom:8px"></div>
+    <input id="vInvestigation" type="hidden">
+
+    <hr>
+    <div class="row"><h3>Medicines</h3><button class="btn secondary" onclick="addMedicineRow()">＋ Database Medicine</button><button class="btn secondary" onclick="addCustomMedicineRow()">＋ Custom Medicine</button></div>
+    <div class="notice">Disease template থাকলে medicine list এখানে আসতে পারে, কিন্তু final prescription আপনি নিজে review/edit করবেন।</div>
+    <div id="visitMedicines"></div>
+
+    <label>Follow-up</label><input id="vFollowUp" placeholder="যেমন: ৭ দিন পরে / প্রয়োজন হলে">
+    <label>Doctor's Advice</label><textarea id="vAdvice"></textarea>
+    <div class="print-actions">
+      <button class="btn success" onclick="saveVisit()">💾 Save Visit</button>
+      <button class="btn primary" onclick="printLatestSavedVisit()">🖨 Print Saved Visit</button>
+    </div>
+    <div class="small" style="margin-top:7px">Save করলে শুধু data সংরক্ষণ হবে। Print button আলাদাভাবে চাপলে prescription print হবে।
+  </div>
+</section>
+
+<!-- MEDICINES -->
+<section id="medicines" class="hidden">
+  <div class="card">
+    <div class="row"><h2 class="section-title">Medicine Database</h2><button class="btn secondary" onclick="showPage('home')">← Home</button></div>
+    <div class="notice">DGDA/DGHS থেকে import করা medicine catalogue আলাদাভাবে IndexedDB-তে রাখা হবে। Prescription-এ শুধু Brand Name দেখানো হবে; Medicine Database-এর Details-এ Generic Name ও available source information দেখা যাবে। Database-এ না থাকা ওষুধ Custom Medicine হিসেবে যোগ করা যাবে।</div>
+    <div class="grid">
+      <div><label>Medicine / Brand Name</label><input id="mName"></div>
+      <div><label>Generic Name</label><input id="mGeneric" placeholder="e.g. Paracetamol"></div>
+      <div><label>Manufacturer</label><input id="mManufacturer" placeholder="Manufacturer"></div>
+      <div><label>Therapeutic Class</label><input id="mClass" placeholder="e.g. Analgesic"></div>
+      <div><label>Strength</label><input id="mStrength" placeholder="e.g. 500 mg"></div>
+      <div><label>Form</label><input id="mForm" placeholder="Tablet / Syrup / etc."></div>
+      <div><label>Default Frequency</label><input id="mFrequency" placeholder="e.g. 1+1+1"></div>
+      <div><label>Food</label><select id="mFood"><option value="">Not specified</option><option>Before food</option><option>After food</option><option>With food</option><option>Any time</option></select></div>
+      <div><label>Duration</label><input id="mDuration" placeholder="e.g. 5 days"></div>
+    </div>
+    <button class="btn primary" onclick="addMedicine()">＋ Save Medicine</button>
+    <hr>
+    <div class="row" style="margin-top:10px">
+      <button class="btn secondary" onclick="document.getElementById('medicineDbFile').click()">📥 Load medicines.json</button>
+      <input id="medicineDbFile" type="file" accept=".json,application/json" style="display:none" onchange="importMedicineDatabase(this)">
+    </div>
+    <div id="medicineDbStatus" class="notice" style="margin-top:10px">Medicine database status: checking…</div>
+    <input id="medicineSearch" class="search" placeholder="Search brand, generic, manufacturer or DAR number" oninput="renderMedicines()">
+    <div id="medicineList"></div>
+  </div>
+</section>
+
+<!-- PRESCRIPTIONS -->
+<section id="prescriptions" class="hidden">
+  <div class="card">
+    <div class="row"><h2 class="section-title">Prescriptions</h2><button class="btn secondary" onclick="showPage('home')">← Home</button></div>
+    <div id="prescriptionList"></div>
+  </div>
+</section>
+
+<!-- PRESCRIPTION DETAIL -->
+<section id="prescriptionDetail" class="hidden">
+  <div class="card" id="prescriptionDetailBox"></div>
+</section>
+
+<!-- HISTORY -->
+<section id="history" class="hidden">
+  <div class="card">
+    <div class="row"><h2 class="section-title">Visit History</h2><button class="btn secondary" onclick="showPage('home')">← Home</button></div>
+    <input id="historySearch" class="search" placeholder="Patient name / phone / ID / diagnosis" oninput="renderHistory()">
+    <div id="historyList"></div>
+  </div>
+</section>
+
+</div>
+<div id="toast" class="toast"></div>
+
+<script>
+"use strict";
+
+const KEY_PATIENTS = "myclinic_patients_v3";
+const KEY_MEDICINES = "myclinic_medicines_v3";
+const KEY_TEMPLATES = "myclinic_templates_v3";
+const KEY_PROFILE = "myclinic_profile_v2";
+
+const DEFAULT_PROFILE = {
+  name: "MD YASHIN GAZI",
+  degree: "D.M.S, MCH",
+  phone1: "01795160443",
+  phone2: "01609027826",
+  clinic: "Mariyam Shebaloy",
+  address: "Pirojpur, Barobazar, Kaliganj, Jhenaidah"
+};
+
+let profile = load(KEY_PROFILE, DEFAULT_PROFILE);
+profile = {...DEFAULT_PROFILE, ...(profile || {})};
+
+let patients = load(KEY_PATIENTS, []);
+let medicines = load(KEY_MEDICINES, []);
+let dgdaMedicines = [];
+let medicineDbReady = false;
+let templates = load(KEY_TEMPLATES, []);
+let currentPatientId = null;
+let currentVisitPatientId = null;
+
+function load(key, fallback){
+  try { return JSON.parse(localStorage.getItem(key)) || fallback; }
+  catch(e){ return fallback; }
+}
+function save(key, value){ localStorage.setItem(key, JSON.stringify(value)); }
+
+function uid(prefix){
+  return prefix + Date.now().toString(36) + Math.random().toString(36).slice(2,6);
+}
+function esc(value){
+  return String(value ?? "").replace(/[&<>"']/g, function(ch){
+    return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch];
+  });
+}
+function toast(msg){
+  const el=document.getElementById("toast");
+  el.textContent=msg; el.style.display="block";
+  clearTimeout(window._toastTimer);
+  window._toastTimer=setTimeout(()=>el.style.display="none",2200);
+}
+
+function loadProfileForm(){
+  const map={
+    profileName:profile.name, profileDegree:profile.degree,
+    profilePhone1:profile.phone1, profilePhone2:profile.phone2,
+    profileClinic:profile.clinic, profileAddress:profile.address
+  };
+  Object.entries(map).forEach(([id,val])=>{ const el=document.getElementById(id); if(el) el.value=val||""; });
+}
+
+function saveProfile(){
+  const next={
+    name:document.getElementById("profileName").value.trim(),
+    degree:document.getElementById("profileDegree").value.trim(),
+    phone1:document.getElementById("profilePhone1").value.trim(),
+    phone2:document.getElementById("profilePhone2").value.trim(),
+    clinic:document.getElementById("profileClinic").value.trim(),
+    address:document.getElementById("profileAddress").value.trim()
+  };
+  if(!next.name || !next.clinic){ toast("ডাক্তারের নাম ও ক্লিনিকের নাম দিন"); return; }
+  profile={...DEFAULT_PROFILE,...next};
+  save(KEY_PROFILE,profile);
+  applyProfileToHeader();
+  toast("Profile saved successfully");
+}
+
+function resetProfileDefaults(){
+  if(!confirm("Default profile information ফিরিয়ে আনবেন?")) return;
+  profile={...DEFAULT_PROFILE};
+  save(KEY_PROFILE,profile);
+  loadProfileForm();
+  applyProfileToHeader();
+  toast("Default profile restored");
+}
+
+function applyProfileToHeader(){
+  const h=document.querySelector(".header h1");
+  const sub=document.querySelector(".header p");
+  if(h) h.textContent=profile.clinic || DEFAULT_PROFILE.clinic;
+  if(sub) sub.textContent="Personal Clinic Management System";
+}
+
+function updateDashboardStats(){
+  const today = new Date();
+  const y = today.getFullYear();
+  const m = today.getMonth();
+  const d = today.getDate();
+
+  let todayPatients = new Set();
+  let totalPrescriptions = 0;
+
+  patients.forEach(p => {
+    (p.visits || []).forEach(v => {
+      totalPrescriptions++;
+      const dt = new Date(v.date);
+      if(!isNaN(dt.getTime()) &&
+         dt.getFullYear() === y &&
+         dt.getMonth() === m &&
+         dt.getDate() === d){
+        todayPatients.add(p.id);
+      }
+    });
+  });
+
+  const todayEl = document.getElementById("statTodayPatients");
+  const totalPatientsEl = document.getElementById("statTotalPatients");
+  const rxEl = document.getElementById("statTotalPrescriptions");
+
+  if(todayEl) todayEl.textContent = todayPatients.size.toLocaleString();
+  if(totalPatientsEl) totalPatientsEl.textContent = patients.length.toLocaleString();
+  if(rxEl) rxEl.textContent = totalPrescriptions.toLocaleString();
+}
+
+function showPage(id){
+  document.querySelectorAll("section").forEach(s=>s.classList.add("hidden"));
+  document.getElementById(id).classList.remove("hidden");
+  if(id==="home") updateDashboardStats();
+  if(id==="profile") loadProfileForm();
+  if(id==="patients") renderPatients();
+  if(id==="medicines") renderMedicines();
+  if(id==="history") renderHistory();
+  if(id==="prescriptions") renderPrescriptions();
+  if(id==="backup") updateBackupPatientSelect();
+  window.scrollTo(0,0);
+}
+
+function nextPatientId(){
+  return "P-" + String(patients.length + 1).padStart(4,"0");
+}
+const COMMON_INVESTIGATIONS=["CBC","ESR","CRP","FBS","RBS","HbA1c","Lipid Profile","LFT","S. Creatinine","Blood Urea","S. Electrolytes","TSH","FT4","Urine R/E","Urine C/S","Stool R/E","HBsAg","Anti-HCV","HIV","Dengue NS1","Dengue IgG/IgM","Widal Test","Malaria Test","X-Ray Chest P/A","X-Ray KUB","USG Whole Abdomen","USG KUB","ECG","Echocardiogram","CT Scan","MRI","Endoscopy","Colonoscopy","Pap Smear","FNAC","Biopsy"];
+let pInvestSelected=[];
+let vInvestSelected=[];
+
+function renderInvestigationTags(inputId, selected, tagId, hiddenId){
+  const tags=document.getElementById(tagId);
+  if(tags) tags.innerHTML=selected.map((x,i)=>`<span class="chip">${esc(x)} <button type="button" class="remove-investigation" data-input="${inputId}" data-index="${i}">×</button></span>`).join("");
+  const hidden=document.getElementById(hiddenId);
+  if(hidden) hidden.value=selected.join(", ");
+}
+
+function investigationMenu(input,menu,selected){
+  const q=(input.value||"").trim().toLowerCase();
+  const list=COMMON_INVESTIGATIONS.filter(x=>!selected.includes(x)&&(!q||x.toLowerCase().includes(q))).slice(0,20);
+  if(!list.length){menu.classList.add("hidden");menu.innerHTML="";return;}
+  menu.innerHTML=list.map(x=>`<div class="investigation-item" data-value="${esc(x)}">${esc(x)}</div>`).join("");
+  menu.classList.remove("hidden");
+}
+
+function setupInvestigation(inputId,menuId,selected,tagId,hiddenId){
+  const input=document.getElementById(inputId), menu=document.getElementById(menuId);
+  if(!input||!menu)return;
+  if(input.dataset.investigationReady==="1"){
+    renderInvestigationTags(inputId,selected,tagId,hiddenId);
+    return;
+  }
+  input.dataset.investigationReady="1";
+  input.addEventListener("focus",()=>investigationMenu(input,menu,selected));
+  input.addEventListener("input",()=>investigationMenu(input,menu,selected));
+  input.addEventListener("keydown",e=>{
+    if(e.key!=="Enter") return;
+    e.preventDefault();
+    const v=input.value.trim();
+    if(v&&!selected.includes(v)) selected.push(v);
+    input.value="";
+    renderInvestigationTags(inputId,selected,tagId,hiddenId);
+    menu.classList.add("hidden");
+  });
+  menu.addEventListener("mousedown",e=>{
+    const item=e.target.closest(".investigation-item");
+    if(!item)return;
+    e.preventDefault();
+    const v=item.dataset.value;
+    if(v&&!selected.includes(v)) selected.push(v);
+    input.value="";
+    renderInvestigationTags(inputId,selected,tagId,hiddenId);
+    menu.classList.add("hidden");
+  });
+  renderInvestigationTags(inputId,selected,tagId,hiddenId);
+}
+
+function removeInvestigation(inputId,index){
+  const arr=inputId==="pInvestigation"?pInvestSelected:vInvestSelected;
+  if(index>=0&&index<arr.length) arr.splice(index,1);
+  const tagId=inputId==="pInvestigation"?"pInvestigationTags":"vInvestigationTags";
+  const hiddenId=inputId==="pInvestigation"?"pInvestigation":"vInvestigation";
+  renderInvestigationTags(inputId,arr,tagId,hiddenId);
+  const input=document.getElementById(inputId);
+  if(input) input.value="";
+}
+
+function syncInvestigationHidden(which){
+  if(which==="v"){
+    const h=document.getElementById("vInvestigation"); if(h) h.value=vInvestSelected.join(", ");
+  }else{
+    const h=document.getElementById("pInvestigation"); if(h) h.value=pInvestSelected.join(", ");
+  }
+}
+
+function clearPatientForm(){
+  ["pName","pPhone","pAge","pAddress","pBP","pTemp","pWeight","pSymptoms","pDiagnosis","pAdvice"].forEach(id=>{const e=document.getElementById(id);if(e)e.value=""});
+  document.getElementById("pGender").value="";
+  document.getElementById("pId").value=nextPatientId();
+  pInvestSelected=[]; vInvestSelected=[];
+  const pt=document.getElementById("pInvestigationTags"); if(pt)pt.innerHTML="";
+  const pi=document.getElementById("pInvestigation"); if(pi)pi.value="";
+  const pm=document.getElementById("patientMedicines"); if(pm){pm.innerHTML="";addPatientMedicineRow();}
+}
+clearPatientForm();
+setupInvestigation("pInvestigation","pInvestigationMenu",pInvestSelected,"pInvestigationTags","pInvestigation");
+updateDashboardStats();
+
+function collectPatientMedicines(){
+  return [...document.querySelectorAll("#patientMedicines .medicine-row")].map(row=>{
+    if(row.dataset.type==="custom"){
+      const name=row.querySelector(".custom-med-name")?.value.trim();
+      if(!name)return null;
+      return {medicineId:"CUSTOM",custom:true,name,generic:"",strength:row.querySelector(".custom-med-strength")?.value.trim()||"",form:row.querySelector(".custom-med-form")?.value.trim()||"",frequency:row.querySelector(".med-frequency")?.value.trim()||"",food:row.querySelector(".med-food")?.value||"",duration:row.querySelector(".med-duration")?.value.trim()||"",condition:row.querySelector(".med-condition")?.value.trim()||""};
+    }
+    const id=row.querySelector(".med-id")?.value||"";
+    const m=medicines.find(x=>String(x.id)===String(id));
+    const name=row.querySelector(".med-search")?.value.trim();
+    if(!name)return null;
+    return {medicineId:m?.id||id,name,generic:m?.generic||m?.genericName||"",strength:row.querySelector(".med-strength")?.value.trim()||m?.strength||"",form:m?.form||m?.dosageForm||"",frequency:row.querySelector(".med-frequency")?.value.trim()||"",food:row.querySelector(".med-food")?.value||"",duration:row.querySelector(".med-duration")?.value.trim()||"",condition:row.querySelector(".med-condition")?.value.trim()||""};
+  }).filter(Boolean);
+}
+function addPatientMedicineRow(data={}){
+  const holder=document.getElementById("patientMedicines");
+  if(!holder)return;
+  const row=document.createElement("div"); row.className="medicine-row"; row.dataset.type="database";
+  row.innerHTML=`<div class="autocomplete-wrap"><input class="med-search" autocomplete="off" placeholder="Brand / Generic / Manufacturer" value="${esc(data.name||"")}"><div class="autocomplete-menu med-menu hidden"></div><input class="med-id" type="hidden" value="${esc(data.medicineId||"")}"></div><div class="small med-db-info"></div><div class="medicine-grid" style="margin-top:8px"><input class="med-frequency" placeholder="Frequency" value="${esc(data.frequency||"")}"><select class="med-food"><option value="">খাবারের সময়</option><option>খাবার আগে</option><option>খাবার পরে</option><option>খাবারের মাঝে</option><option>যেকোনো সময়</option></select><input class="med-duration" placeholder="Duration" value="${esc(data.duration||"")}"><input class="med-strength" placeholder="Strength" value="${esc(data.strength||"")}></div><input class="med-condition" style="margin-top:8px" placeholder="প্রয়োজনে / শর্ত" value="${esc(data.condition||"")}"><button class="btn danger" style="margin-top:8px" onclick="this.parentElement.remove()">Remove</button>`;
+  holder.appendChild(row);
+  const input=row.querySelector(".med-search"),menu=row.querySelector(".med-menu");
+  function draw(){const list=medicineSearchList(input.value);if(!list.length){menu.classList.add("hidden");return}menu.innerHTML=list.map(m=>`<div class="autocomplete-item" data-id="${esc(m.id)}"><b>${esc(m.name||m.brandName||"")}</b><div class="autocomplete-meta">${esc([m.generic,m.strength,m.form,m.manufacturer].filter(Boolean).join(" · "))}</div></div>`).join("");menu.classList.remove("hidden")}
+  input.addEventListener("focus",draw);input.addEventListener("input",draw);
+  menu.addEventListener("mousedown",e=>{const it=e.target.closest(".autocomplete-item");if(!it)return;e.preventDefault();const m=medicines.find(x=>String(x.id)===String(it.dataset.id));if(!m)return;input.value=m.name||m.brandName||"";row.querySelector(".med-id").value=m.id||"";row.querySelector(".med-strength").value=m.strength||"";row.querySelector(".med-frequency").value=m.frequency||"";row.querySelector(".med-food").value=m.food||"";row.querySelector(".med-duration").value=m.duration||"";row.querySelector(".med-db-info").textContent=[m.generic,m.form,m.manufacturer,m.darNumber].filter(Boolean).join(" · ");menu.classList.add("hidden")});
+  if(data.food)row.querySelector(".med-food").value=data.food;
+}
+function addPatientCustomMedicineRow(data={}){
+  const row=document.createElement("div");row.className="medicine-row";row.dataset.type="custom";
+  row.innerHTML=`<div class="medicine-grid"><input class="custom-med-name" placeholder="Custom Brand Name" value="${esc(data.name||"")}"><input class="custom-med-strength" placeholder="Strength" value="${esc(data.strength||"")}"><input class="custom-med-form" placeholder="Form" value="${esc(data.form||"")}"><input class="med-frequency" placeholder="Frequency" value="${esc(data.frequency||"")}"></div><div class="medicine-grid" style="margin-top:8px"><select class="med-food"><option value="">খাবারের সময়</option><option>খাবার আগে</option><option>খাবার পরে</option><option>খাবারের মাঝে</option><option>যেকোনো সময়</option></select><input class="med-duration" placeholder="Duration" value="${esc(data.duration||"")}"><div></div><div></div></div><input class="med-condition" style="margin-top:8px" placeholder="প্রয়োজনে / শর্ত" value="${esc(data.condition||"")}"><button class="btn danger" style="margin-top:8px" onclick="this.parentElement.remove()">Remove</button>`;
+  document.getElementById("patientMedicines").appendChild(row);
+  if(data.food)row.querySelector(".med-food").value=data.food;
+}
+
+function saveNewPatient(){
+  const name=document.getElementById("pName").value.trim();
+  const phone=document.getElementById("pPhone").value.trim();
+  if(!name || !phone){ toast("নাম ও ফোন নম্বর দিন"); return; }
+
+  const patient={
+    id:document.getElementById("pId").value || nextPatientId(),
+    name, phone,
+    age:document.getElementById("pAge").value,
+    gender:document.getElementById("pGender").value,
+    address:document.getElementById("pAddress").value.trim(),
+    createdAt:new Date().toISOString(),
+    visits:[]
+  };
+
+  const firstVisit={
+    id:uid("V-"),
+    date:new Date().toISOString(),
+    bp:document.getElementById("pBP").value.trim(),
+    temperature:document.getElementById("pTemp").value.trim(),
+    weight:document.getElementById("pWeight").value.trim(),
+    symptoms:document.getElementById("pSymptoms").value.trim(),
+    diagnosis:document.getElementById("pDiagnosis").value.trim(),
+    investigation:(document.getElementById("pInvestigation")?.value||"").trim(),
+    medicines:collectPatientMedicines(),
+    advice:document.getElementById("pAdvice").value.trim()
+  };
+  if(firstVisit.bp||firstVisit.temperature||firstVisit.weight||firstVisit.symptoms||firstVisit.diagnosis||firstVisit.investigation||firstVisit.medicines.length||firstVisit.advice){
+    patient.visits.push(firstVisit);
+  }
+
+  patients.push(patient);
+  save(KEY_PATIENTS,patients);
+  updateDashboardStats();
+  toast("Patient saved");
+  resetPatientFormMode();
+  openPatient(patient.id);
+}
+
+function searchPatients(){
+  const q=document.getElementById("globalSearch").value.trim().toLowerCase();
+  if(!q){return;}
+  const found=patients.filter(p=>
+    p.name.toLowerCase().includes(q) ||
+    p.phone.toLowerCase().includes(q) ||
+    p.id.toLowerCase().includes(q)
+  );
+  if(found.length===1) openPatient(found[0].id);
+}
+
+function renderPatients(){
+  const q=(document.getElementById("patientListSearch")?.value||"").trim().toLowerCase();
+  const list=patients.filter(p=>
+    !q || p.name.toLowerCase().includes(q) || p.phone.toLowerCase().includes(q) || p.id.toLowerCase().includes(q)
+  );
+  const box=document.getElementById("patientList");
+  if(!list.length){box.innerHTML='<div class="empty">কোনো patient পাওয়া যায়নি</div>';return;}
+  box.innerHTML=list.slice().reverse().map(p=>`
+    <div class="list-item">
+      <div class="row">
+        <div><b>${esc(p.name)}</b> <span class="badge">${esc(p.id)}</span>
+        <div class="small">${esc(p.phone)} ${p.age? "• "+esc(p.age)+" years":""} ${p.gender?"• "+esc(p.gender):""}</div></div>
+        <div>
+          <button class="btn primary" onclick="openPatient('${p.id}')">View</button>
+          <button class="btn secondary" onclick="startVisit('${p.id}')">＋ Visit</button>
+        </div>
+      </div>
+    </div>`).join("");
+}
+
+function openPatient(id){
+  const p=patients.find(x=>x.id===id); if(!p)return;
+  currentPatientId=id;
+  const box=document.getElementById("patientDetailBox");
+  box.innerHTML=`
+    <div class="row"><h2>${esc(p.name)}</h2><button class="btn secondary" onclick="showPage('patients')">← Back</button></div>
+    <p><b>Patient ID:</b> ${esc(p.id)} &nbsp; <b>Phone:</b> ${esc(p.phone)}</p>
+    <p><b>Age:</b> ${esc(p.age||"-")} &nbsp; <b>Gender:</b> ${esc(p.gender||"-")}</p>
+    <p><b>Address:</b> ${esc(p.address||"-")}</p>
+    <button class="btn primary" onclick="startVisit('${p.id}')">＋ New Visit</button>
+    <button class="btn secondary" onclick="editPatient('${p.id}')">✏️ Edit Patient</button>
+    <button class="btn secondary" onclick="exportPatientFile('${p.id}')">📄 Save Patient File</button>
+    <button class="btn danger" onclick="deletePatient('${p.id}')">Delete Patient</button>
+    <hr>
+    <h3>Visit History (${p.visits.length})</h3>
+    ${p.visits.length ? p.visits.slice().reverse().map(v=>visitCard(p,v)).join("") : '<div class="empty">No visit yet</div>'}`;
+  showPage("patientDetail");
+}
+function visitCard(p,v){
+  return `<div class="list-item">
+    <div class="row"><b>${new Date(v.date).toLocaleString()}</b><span class="badge">${esc(v.diagnosis||"No diagnosis")}</span></div>
+    <p><b>BP:</b> ${esc(v.bp||"-")} &nbsp; <b>Temp:</b> ${esc(v.temperature||"-")} &nbsp; <b>Weight:</b> ${esc(v.weight||"-")}</p>
+    <p><b>Symptoms:</b> ${esc(v.symptoms||"-")}</p>
+    ${v.medicines?.length ? "<b>Medicines:</b><ul>"+v.medicines.map(m=>`<li><b>${esc(m.name)} ${esc(m.strength)}</b> — ${esc(m.frequency||"-")} • ${esc(m.food||"-")} • ${esc(m.duration||"-")}</li>`).join("")+"</ul>":""}
+    <p><b>Advice:</b> ${esc(v.advice||"-")}</p>
+    <p><b>Follow-up:</b> ${esc(v.followUp||"-")}</p>
+    <button class="btn secondary" onclick="printPrescription('${p.id}','${v.id}')">🖨 Print</button>
+  </div>`;
+}
+
+function editPatient(id){
+  const p=patients.find(x=>x.id===id);
+  if(!p)return;
+  document.getElementById("pName").value=p.name||"";
+  document.getElementById("pPhone").value=p.phone||"";
+  document.getElementById("pAge").value=p.age||"";
+  document.getElementById("pGender").value=p.gender||"";
+  document.getElementById("pAddress").value=p.address||"";
+  document.getElementById("pId").value=p.id||"";
+  const latest=p.visits?.length ? p.visits[p.visits.length-1] : null;
+  document.getElementById("pBP").value=latest?.bp||"";
+  document.getElementById("pTemp").value=latest?.temperature||"";
+  document.getElementById("pWeight").value=latest?.weight||"";
+  document.getElementById("pSymptoms").value=latest?.symptoms||"";
+  document.getElementById("pDiagnosis").value=latest?.diagnosis||"";
+  document.getElementById("pAdvice").value=latest?.advice||"";
+
+  document.getElementById("patientFormTitle").textContent="Edit Patient";
+  document.getElementById("patientSaveBtn").textContent="Update Patient";
+  document.getElementById("patientSaveBtn").onclick=function(){updatePatient(id);};
+  showPage("patientForm");
+}
+
+function updatePatient(id){
+  const p=patients.find(x=>x.id===id);
+  if(!p)return;
+  const name=document.getElementById("pName").value.trim();
+  const phone=document.getElementById("pPhone").value.trim();
+  if(!name||!phone){toast("নাম ও ফোন নম্বর দিন");return;}
+
+  p.name=name;
+  p.phone=phone;
+  p.age=document.getElementById("pAge").value;
+  p.gender=document.getElementById("pGender").value;
+  p.address=document.getElementById("pAddress").value.trim();
+  save(KEY_PATIENTS,patients);
+  toast("Patient updated");
+  resetPatientFormMode();
+  openPatient(id);
+}
+
+function resetPatientFormMode(){
+  document.getElementById("patientFormTitle").textContent="New Patient";
+  document.getElementById("patientSaveBtn").textContent="Save Patient";
+  document.getElementById("patientSaveBtn").onclick=function(){saveNewPatient();};
+  clearPatientForm();
+}
+
+function deletePatient(id){
+  if(!confirm("এই patient-এর সব record delete করবেন?")) return;
+  patients=patients.filter(p=>p.id!==id);
+  save(KEY_PATIENTS,patients);
+  showPage("patients");
+}
+
+function startVisit(id){
+  const p=patients.find(x=>x.id===id); if(!p)return;
+  currentVisitPatientId=id;
+  document.getElementById("visitPatientInfo").innerHTML=`
+    <div class="list-item"><b>${esc(p.name)}</b> <span class="badge">${esc(p.id)}</span>
+    <div class="small">${esc(p.phone)} • Age ${esc(p.age||"-")} • ${esc(p.gender||"-")}</div></div>`;
+  ["vBP","vTemp","vWeight","vSymptoms","vDiagnosis","vInvestigation","vAdvice"].forEach(x=>document.getElementById(x).value="");
+  document.getElementById("visitMedicines").innerHTML="";
+  
+  pInvestSelected=[];
+  vInvestSelected=[];
+  setupInvestigation("vInvestigationInput","vInvestigationMenu",vInvestSelected,"vInvestigationTags","vInvestigation");
+  renderInvestigationTags("vInvestigationInput",vInvestSelected,"vInvestigationTags","vInvestigation");
+  fillDiseaseList();
+  showPage("visitForm");
+}
+
+function fillDiseaseList(){
+  document.getElementById("diseaseList").innerHTML=templates.map(t=>`<option value="${esc(t.disease)}"></option>`).join("");
+}
+
+function applyDiseaseTemplate(){
+  const disease=document.getElementById("vDiagnosis").value.trim().toLowerCase();
+  const t=templates.find(x=>x.disease.toLowerCase()===disease);
+  if(!t)return;
+  const box=document.getElementById("visitMedicines");
+  box.innerHTML="";
+  (t.medicines||[]).forEach(m=>m.custom ? addCustomMedicineRow(m) : addMedicineRow(m));
+  toast("Template loaded — review before saving");
+}
+
+function medicineOptions(selected=""){
+  // Prescription/template dropdown intentionally shows BRAND NAME only.
+  return medicines.map(m=>`<option value="${esc(m.id)}" ${m.id===selected?"selected":""}>${esc(m.name||"Unnamed")}</option>`).join("");
+}
+
+function medicineSearchList(q){
+  q=(q||"").toLowerCase().trim();
+  if(!q)return [];
+  return medicines.filter(m=>{
+    const s=[m.name,m.brandName,m.generic,m.strength,m.form,m.manufacturer,m.darNumber].filter(Boolean).join(" ").toLowerCase();
+    return s.includes(q);
+  }).slice(0,20);
+}
+function addMedicineRow(data={}){
+  const row=document.createElement("div");
+  row.className="medicine-row";
+  row.dataset.type="database";
+  row.innerHTML=`
+    <div class="autocomplete-wrap">
+      <input class="med-search" autocomplete="off" placeholder="Brand / Generic / Manufacturer" value="${esc(data.name||"")}">
+      <div class="autocomplete-menu med-menu hidden"></div>
+      <input class="med-id" type="hidden" value="${esc(data.medicineId||"")}">
+    </div>
+    <div class="small med-db-info" style="margin-top:4px"></div>
+    <div class="medicine-grid" style="margin-top:8px">
+      <input class="med-frequency" placeholder="Frequency" value="${esc(data.frequency||"")}">
+      <select class="med-food"><option value="">খাবারের সময়</option><option>খাবার আগে</option><option>খাবার পরে</option><option>খাবারের মাঝে</option><option>যেকোনো সময়</option></select>
+      <input class="med-duration" placeholder="Duration" value="${esc(data.duration||"")}">
+      <input class="med-strength" placeholder="Strength" value="${esc(data.strength||"")}">
+    </div>
+    <input class="med-condition" style="margin-top:8px" placeholder="প্রয়োজনে / শর্ত (যেমন: ব্যথা থাকলে, জ্বর হলে, জ্বর না থাকলে খাবেনা)" value="${esc(data.condition||"")}">
+    <button class="btn danger" style="margin-top:8px" onclick="this.parentElement.remove()">Remove</button>`;
+  document.getElementById("visitMedicines").appendChild(row);
+
+  const input=row.querySelector(".med-search"), menu=row.querySelector(".med-menu");
+  const info=row.querySelector(".med-db-info");
+  function draw(){
+    const list=medicineSearchList(input.value);
+    if(!list.length){menu.classList.add("hidden");return;}
+    menu.innerHTML=list.map(m=>{
+      const generic=m.generic||m.genericName||"";
+      const meta=[generic,m.strength,m.form,m.manufacturer].filter(Boolean).join(" · ");
+      return `<div class="autocomplete-item" data-id="${esc(m.id)}"><b>${esc(m.name||m.brandName||"")}</b><div class="autocomplete-meta">${esc(meta)}</div></div>`;
+    }).join("");
+    menu.classList.remove("hidden");
+  }
+  input.addEventListener("focus",draw);
+  input.addEventListener("input",draw);
+  menu.addEventListener("mousedown",e=>{
+    const item=e.target.closest(".autocomplete-item"); if(!item)return;
+    e.preventDefault();
+    const m=medicines.find(x=>String(x.id)===String(item.dataset.id)); if(!m)return;
+    input.value=m.name||m.brandName||"";
+    row.querySelector(".med-id").value=m.id||"";
+    row.querySelector(".med-strength").value=m.strength||"";
+    row.querySelector(".med-frequency").value=m.frequency||"";
+    row.querySelector(".med-food").value=m.food||"";
+    row.querySelector(".med-duration").value=m.duration||"";
+    info.textContent=[m.generic,m.form,m.manufacturer,m.darNumber].filter(Boolean).join(" · ");
+    menu.classList.add("hidden");
+  });
+  document.addEventListener("click",function close(e){
+    if(!row.contains(e.target)){menu.classList.add("hidden");document.removeEventListener("click",close);}
+  });
+  if(data.food) row.querySelector(".med-food").value=data.food;
+}
+function addCustomMedicineRow(data={}){
+  const row=document.createElement("div");
+  row.className="medicine-row";
+  row.dataset.type="custom";
+  row.innerHTML=`
+    <div class="medicine-grid">
+      <input class="custom-med-name" placeholder="Custom Brand Name" value="${esc(data.name||"")}">
+      <input class="custom-med-strength" placeholder="Strength" value="${esc(data.strength||"")}">
+      <input class="custom-med-form" placeholder="Form" value="${esc(data.form||"")}">
+      <input class="med-frequency" placeholder="Frequency" value="${esc(data.frequency||"")}">
+    </div>
+    <div class="medicine-grid" style="margin-top:8px">
+      <select class="med-food"><option value="">খাবারের সময়</option><option>খাবার আগে</option><option>খাবার পরে</option><option>খাবারের মাঝে</option><option>যেকোনো সময়</option></select>
+      <input class="med-duration" placeholder="Duration" value="${esc(data.duration||"")}">
+      <div></div><div></div>
+    </div>
+    <input class="med-condition" style="margin-top:8px" placeholder="প্রয়োজনে / শর্ত (যেমন: ব্যথা থাকলে, জ্বর হলে, জ্বর না থাকলে খাবেনা)" value="${esc(data.condition||"")}">
+    <div class="small" style="margin-top:6px">Custom medicine শুধু এই visit-এ থাকবে; Medicine Database-এ automatically যোগ হবে না।</div>
+    <button class="btn danger" style="margin-top:8px" onclick="this.parentElement.remove()">Remove</button>`;
+  document.getElementById("visitMedicines").appendChild(row);
+  if(data.food) row.querySelector(".med-food").value=data.food;
+}
+
+document.addEventListener("change",function(e){
+  if(!e.target.classList.contains("med-select"))return;
+  const m=medicines.find(x=>x.id===e.target.value);
+  if(!m)return;
+  const row=e.target.closest(".medicine-row");
+  row.querySelector(".med-frequency").value=m.frequency||"";
+  row.querySelector(".med-food").value=m.food||"";
+  row.querySelector(".med-duration").value=m.duration||"";
+});
+
+function collectVisitMedicines(){
+  return [...document.querySelectorAll("#visitMedicines .medicine-row")].map(row=>{
+    if(row.dataset.type==="custom"){
+      const name=row.querySelector(".custom-med-name").value.trim();
+      if(!name)return null;
+      return {
+        medicineId:"CUSTOM", custom:true, name,
+        generic:"",
+        strength:row.querySelector(".custom-med-strength").value.trim(),
+        form:row.querySelector(".custom-med-form").value.trim(),
+        frequency:row.querySelector(".med-frequency").value.trim(),
+        food:row.querySelector(".med-food").value,
+        duration:row.querySelector(".med-duration").value.trim(),
+        condition:row.querySelector(".med-condition")?.value.trim()||""
+      };
+    }
+    const id=row.querySelector(".med-id")?.value;
+    const m=medicines.find(x=>String(x.id)===String(id));
+    const name=row.querySelector(".med-search")?.value.trim();
+    if(!name)return null;
+    return {
+      medicineId:m?.id||id||"CUSTOM",
+      name,
+      generic:m?.generic||m?.genericName||"",
+      strength:row.querySelector(".med-strength").value.trim() || m?.strength || "",
+      form:m?.form||m?.dosageForm||"",
+      frequency:row.querySelector(".med-frequency").value.trim(),
+      food:row.querySelector(".med-food").value,
+      duration:row.querySelector(".med-duration").value.trim(),
+      condition:row.querySelector(".med-condition")?.value.trim()||""
+    };
+  }).filter(Boolean);
+}
+
+function saveVisit(){
+  const p=patients.find(x=>x.id===currentVisitPatientId);
+  if(!p){toast("Patient নির্বাচন করুন");return;}
+  syncInvestigationHidden("v");
+  const visit={
+    id:uid("V-"),date:new Date().toISOString(),
+    bp:document.getElementById("vBP").value.trim(),
+    temperature:document.getElementById("vTemp").value.trim(),
+    weight:document.getElementById("vWeight").value.trim(),
+    symptoms:document.getElementById("vSymptoms").value.trim(),
+    diagnosis:document.getElementById("vDiagnosis").value.trim(),
+    investigation:document.getElementById("vInvestigation").value.trim(),
+    medicines:collectVisitMedicines(),
+    followUp:document.getElementById("vFollowUp")?.value.trim()||"",
+    advice:document.getElementById("vAdvice").value.trim()
+  };
+  p.visits.push(visit);
+  save(KEY_PATIENTS,patients);
+  updateDashboardStats();
+  toast("Visit saved successfully");
+}
+function printLatestSavedVisit(){
+  const p=patients.find(x=>x.id===currentVisitPatientId);
+  if(!p || !p.visits || !p.visits.length){toast("আগে Save Visit করুন");return;}
+  const v=p.visits[p.visits.length-1];
+  printPrescription(p.id,v.id);
+}
+
+function addMedicine(){
+  const name=document.getElementById("mName").value.trim();
+  if(!name){toast("Brand Name দিন");return;}
+  const item={
+    id:uid("M-"), name,
+    generic:document.getElementById("mGeneric").value.trim(),
+    manufacturer:document.getElementById("mManufacturer")?.value.trim()||"",
+    therapeuticClass:document.getElementById("mClass")?.value.trim()||"",
+    strength:document.getElementById("mStrength").value.trim(),
+    form:document.getElementById("mForm").value.trim(),
+    frequency:document.getElementById("mFrequency").value.trim(),
+    food:document.getElementById("mFood").value,
+    duration:document.getElementById("mDuration").value.trim(),
+    indications:document.getElementById("mIndications")?.value.trim()||"",
+    pharmacology:document.getElementById("mPharmacology")?.value.trim()||"",
+    contraindications:document.getElementById("mContraindications")?.value.trim()||"",
+    precautions:document.getElementById("mPrecautions")?.value.trim()||"",
+    sideEffects:document.getElementById("mSideEffects")?.value.trim()||"",
+    interactions:document.getElementById("mInteractions")?.value.trim()||"",
+    pregnancy:document.getElementById("mPregnancy")?.value.trim()||"",
+    storage:document.getElementById("mStorage")?.value.trim()||"",
+    source:"User added", custom:true
+  };
+  medicines.push(item);
+  saveLocalCustomMedicines();
+  resetMedicineForm();
+  renderMedicines();
+  toast("Custom medicine added");
+}
+
+async function importMedicineDatabase(input){
+  const file=input.files?.[0];
+  if(!file)return;
+  if(!/json$/i.test(file.name)){toast("medicines.json নির্বাচন করুন");input.value="";return;}
+  try{
+    toast("Reading medicine database… Please wait");
+    const text=await file.text();
+    const db=JSON.parse(text);
+    if(!Array.isArray(db))throw new Error("Invalid database");
+    await putDGDAInIndexedDB(db);
+    dgdaMedicines=db.map(normalizeMedicine);
+    medicineDbReady=true;
+    medicines=[...load(KEY_MEDICINES,[]).filter(m=>m.custom===true || m.source==="User added"),...dgdaMedicines];
+    dedupeMedicinesInMemory();
+    renderMedicines();
+    const status=document.getElementById("medicineDbStatus");
+    if(status) status.innerHTML=`✅ DGDA medicine database ready: <b>${dgdaMedicines.length.toLocaleString()}</b> medicines.`;
+    toast(`DGDA database imported: ${dgdaMedicines.length.toLocaleString()} medicines`);
+  }catch(e){
+    console.error(e);
+    toast("Database import failed: "+(e.message||"unknown error"));
+  }
+  input.value="";
+}
+
+function renderMedicines(){
+  const box=document.getElementById("medicineList");
+  if(!box)return;
+  const q=(document.getElementById("medicineSearch")?.value||"").toLowerCase().trim();
+  const list=medicines.filter(m=>
+    (m.name+" "+(m.brandName||"")+" "+(m.generic||"")+" "+(m.strength||"")+" "+(m.form||"")+" "+(m.manufacturer||"")+" "+(m.therapeuticClass||"")+" "+(m.darNumber||"")).toLowerCase().includes(q)
+  );
+  if(!list.length){box.innerHTML='<div class="empty">No medicines found.</div>';return;}
+  const MAX=300;
+  const shown=list.slice(0,MAX);
+  box.innerHTML=shown.map(m=>`
+    <div class="list-item">
+      <div class="row">
+        <div style="flex:1">
+          <b>${esc(m.name||"Unnamed")} ${esc(m.strength||"")}</b>
+          <div class="small"><b>Generic:</b> ${esc(m.generic||"Not set")}</div>
+          <div class="small">${esc(m.form||"")} ${m.manufacturer?"• "+esc(m.manufacturer):""}</div>
+          ${m.source?`<div class="small">Source: ${esc(m.source)}</div>`:""}
+        </div>
+        <div><button class="btn primary" onclick="openMedicineDetail('${esc(m.id)}')">View Details</button>${m.custom?` <button class="btn secondary" onclick="editMedicine('${esc(m.id)}')">Edit</button><button class="btn danger" onclick="deleteMedicine('${esc(m.id)}')">Delete</button>`:""}</div>
+      </div>
+    </div>`).join("") + (list.length>MAX?`<div class="notice">Showing first ${MAX} results. Search by brand/generic/manufacturer to narrow the list (${list.length.toLocaleString()} matches).</div>`:"");
+}
+
+function deleteMedicine(id){
+  const m=medicines.find(x=>x.id===id);
+  if(!m || !m.custom){toast("DGDA medicine cannot be deleted here");return;}
+  if(!confirm("এই custom medicine delete করবেন?"))return;
+  medicines=medicines.filter(x=>x.id!==id);
+  saveLocalCustomMedicines();
+  renderMedicines();
+  toast("Custom medicine deleted");
+}
+
+function renderHistory(){
+  const q=(document.getElementById("historySearch")?.value||"").toLowerCase();
+  const all=[];
+  patients.forEach(p=>p.visits.forEach(v=>all.push({p,v})));
+  const list=all.filter(x=>(x.p.name+" "+x.p.phone+" "+x.p.id+" "+x.v.diagnosis+" "+x.v.symptoms).toLowerCase().includes(q))
+               .sort((a,b)=>new Date(b.v.date)-new Date(a.v.date));
+  const box=document.getElementById("historyList");
+  if(!list.length){box.innerHTML='<div class="empty">No visit history found</div>';return;}
+  box.innerHTML=list.map(x=>`
+    <div class="list-item">
+      <div class="row"><div><b>${esc(x.p.name)}</b> <span class="badge">${esc(x.p.id)}</span>
+      <div class="small">${new Date(x.v.date).toLocaleString()} • ${esc(x.p.phone)}</div></div>
+      <button class="btn primary" onclick="openPatient('${x.p.id}')">Open Patient</button></div>
+      <p><b>Diagnosis:</b> ${esc(x.v.diagnosis||"-")}</p>
+      <p><b>BP:</b> ${esc(x.v.bp||"-")} &nbsp; <b>Temp:</b> ${esc(x.v.temperature||"-")} &nbsp; <b>Weight:</b> ${esc(x.v.weight||"-")}</p>
+      <p><b>Symptoms:</b> ${esc(x.v.symptoms||"-")}</p>
+      <button class="btn secondary" onclick="printPrescription('${x.p.id}','${x.v.id}')">🖨 Print Prescription</button>
+    </div>`).join("");
+}
+
+
+function openMedicineDetail(id){
+  const m=medicines.find(x=>x.id===id);
+  if(!m)return;
+  const raw=m.raw||{};
+  const extras=raw.extras||{};
+  const field=(label,val)=>`<div class="list-item"><b>${label}</b><p>${esc(val||"Not available").replace(/\n/g,"<br>")}</p></div>`;
+  const box=document.getElementById("medicineDetailBox");
+  box.innerHTML=`
+    <div class="row"><div><h2 class="section-title">${esc(m.name||"Medicine")} ${esc(m.strength||"")}</h2><div class="small"><b>Generic:</b> ${esc(m.generic||"Not set")}</div></div><button class="btn secondary" onclick="showPage('medicines')">← Back</button></div>
+    <div class="grid3">
+      <div class="list-item"><b>Dosage Form</b><br>${esc(m.form||m.dosageForm||extras.dosage_form||"-")}</div>
+      <div class="list-item"><b>Manufacturer</b><br>${esc(m.manufacturer||extras.company||"-")}</div>
+      <div class="list-item"><b>DAR Number</b><br>${esc(m.darNumber||extras.dar_number||"-")}</div>
+    </div>
+    <div class="grid3">
+      <div class="list-item"><b>Registration Status</b><br>${esc(m.registrationStatus||"-")}</div>
+      <div class="list-item"><b>Country</b><br>${esc(m.country||"-")}</div>
+      <div class="list-item"><b>Source</b><br>${esc(m.source||raw.source||"-")}</div>
+    </div>
+    ${field("Trade / Brand Name",extras.trade_name||m.brandName||m.name)}
+    ${field("Generic / Composition",extras.generic_content_raw||m.generic)}
+    ${field("Therapeutic Class",m.therapeuticClass)}
+    ${field("Indications / Uses",m.indications)}
+    ${field("Pharmacology",m.pharmacology)}
+    ${field("Contraindications",m.contraindications)}
+    ${field("Warnings / Precautions",m.precautions)}
+    ${field("Side Effects",m.sideEffects)}
+    ${field("Drug Interactions",m.interactions)}
+    ${field("Pregnancy / Lactation",m.pregnancy)}
+    ${field("Storage",m.storage)}
+    ${field("Source URL",raw.source_url||m.sourceUrl)}
+    <div class="list-item"><b>Personal prescription defaults</b><p>Frequency: ${esc(m.frequency||"-")}<br>Food: ${esc(m.food||"-")}<br>Duration: ${esc(m.duration||"-")}</p></div>
+    ${m.custom?`<button class="btn primary" onclick="editMedicine('${esc(m.id)}')">✏️ Edit Medicine</button>`:""}
+  `;
+  showPage("medicineDetail");
+}
+
+function editMedicine(id){
+  const m=medicines.find(x=>x.id===id);
+  if(!m || !m.custom){toast("শুধু Custom medicine edit করা যাবে");return;}
+  const vals={mName:m.name||"",mGeneric:m.generic||"",mManufacturer:m.manufacturer||"",mClass:m.therapeuticClass||"",mStrength:m.strength||"",mForm:m.form||"",mFrequency:m.frequency||"",mFood:m.food||"",mDuration:m.duration||""};
+  Object.entries(vals).forEach(([k,v])=>{const el=document.getElementById(k);if(el)el.value=v;});
+  const btn=document.querySelector('#medicines button.btn.primary');
+  if(btn){btn.textContent="Update Medicine";btn.onclick=function(){updateMedicine(id);};}
+  showPage("medicines"); window.scrollTo(0,0);
+}
+
+function updateMedicine(id){
+  const m=medicines.find(x=>x.id===id);
+  if(!m || !m.custom)return;
+  m.name=document.getElementById("mName").value.trim();
+  if(!m.name){toast("Brand Name দিন");return;}
+  m.generic=document.getElementById("mGeneric").value.trim();
+  m.manufacturer=document.getElementById("mManufacturer")?.value.trim()||"";
+  m.therapeuticClass=document.getElementById("mClass")?.value.trim()||"";
+  m.strength=document.getElementById("mStrength").value.trim();
+  m.form=document.getElementById("mForm").value.trim();
+  m.frequency=document.getElementById("mFrequency").value.trim();
+  m.food=document.getElementById("mFood").value;
+  m.duration=document.getElementById("mDuration").value.trim();
+  saveLocalCustomMedicines();
+  resetMedicineForm(); renderMedicines(); toast("Medicine updated");
+}
+
+function renderPrescriptions(){
+  const all=[];
+  patients.forEach(p=>p.visits.forEach(v=>all.push({p,v})));
+  all.sort((a,b)=>new Date(b.v.date)-new Date(a.v.date));
+  const box=document.getElementById("prescriptionList");
+  if(!all.length){
+    box.innerHTML='<div class="empty">No prescriptions yet</div>';
+    return;
+  }
+
+  box.innerHTML=all.map(x=>{
+    const count=(x.v.medicines||[]).length;
+    return `
+    <div class="list-item">
+      <div class="row">
+        <div>
+          <b>${esc(x.p.name)}</b> <span class="badge">${esc(x.p.id)}</span>
+          <div class="small">${new Date(x.v.date).toLocaleString()} • ${esc(x.v.diagnosis||"No diagnosis")}</div>
+          <div style="margin-top:7px"><b>${count}</b> medicine${count===1?"":"s"}</div>
+        </div>
+        <div>
+          <button class="btn primary" onclick="openPrescription('${x.p.id}','${x.v.id}')">👁 View</button>
+          <button class="btn secondary" onclick="printPrescription('${x.p.id}','${x.v.id}')">🖨 Print</button>
+        </div>
+      </div>
+    </div>`;
+  }).join("");
+}
+
+function openPrescription(pid,vid){
+  const p=patients.find(x=>x.id===pid);
+  if(!p)return;
+  const v=p.visits.find(x=>x.id===vid);
+  if(!v)return;
+
+  const meds=v.medicines||[];
+  const box=document.getElementById("prescriptionDetailBox");
+
+  box.innerHTML=`
+    <div class="row">
+      <div>
+        <h2 class="section-title">Prescription</h2>
+        <div class="small">${new Date(v.date).toLocaleString()}</div>
+      </div>
+      <button class="btn secondary" onclick="showPage('prescriptions')">← Back</button>
+    </div>
+
+    <div class="list-item">
+      <h3 style="margin-top:0">${esc(p.name)} <span class="badge">${esc(p.id)}</span></h3>
+      <div><b>Phone:</b> ${esc(p.phone)}</div>
+      <div><b>Age:</b> ${esc(p.age||"-")} &nbsp; <b>Gender:</b> ${esc(p.gender||"-")}</div>
+    </div>
+
+    <div class="grid3">
+      <div class="list-item"><b>BP</b><br>${esc(v.bp||"-")}</div>
+      <div class="list-item"><b>Temperature</b><br>${esc(v.temperature||"-")}</div>
+      <div class="list-item"><b>Weight</b><br>${esc(v.weight||"-")}</div>
+    </div>
+
+    <div class="list-item">
+      <b>Symptoms / Complaints</b>
+      <p>${esc(v.symptoms||"-").replace(/\\n/g,"<br>")}</p>
+      <b>Diagnosis</b>
+      <p>${esc(v.diagnosis||"-")}</p>
+      <b>Investigation / পরীক্ষা-নিরীক্ষা</b>
+      <p>${esc(v.investigation||"-").replace(/\\n/g,"<br>")}</p>
+    </div>
+
+    <h3>💊 Medicines (${meds.length})</h3>
+    ${meds.length ? meds.map((m,i)=>`
+      <div class="medicine-row">
+        <div class="row">
+          <div>
+            <b>${i+1}. ${esc(m.name)} ${esc(m.strength||"")}</b>
+            <div class="small">${esc(m.form||"")}</div>
+          </div>
+          <span class="badge">${esc(m.duration||"Duration not set")}</span>
+        </div>
+        <div style="margin-top:8px">
+          <b>Frequency:</b> ${esc(m.frequency||"-")} &nbsp; 
+          <b>Food:</b> ${esc(m.food||"-")} &nbsp;
+          <b>Duration:</b> ${esc(m.duration||"-")}
+          ${m.condition ? `<div style="margin-top:6px"><b>শর্ত:</b> (${esc(m.condition)})</div>` : ""}
+        </div>
+      </div>`).join("") :
+      '<div class="empty">এই prescription-এ কোনো medicine save করা হয়নি।</div>'}
+
+    <div class="list-item" style="margin-top:18px">
+      <b>Doctor's Advice</b>
+      <p>${esc(v.advice||"-").replace(/\\n/g,"<br>")}</p>
+    </div>
+
+    <div class="list-item">
+      <b>Follow-up</b>
+      <p>${esc(v.followUp||"-")}</p>
+    </div>
+
+    <button class="btn primary" onclick="printPrescription('${p.id}','${v.id}')">🖨 Print Prescription</button>
+  `;
+
+  showPage("prescriptionDetail");
+}
+
+function printPrescription(pid,vid){
+  const p=patients.find(x=>x.id===pid); if(!p)return;
+  const v=p.visits.find(x=>x.id===vid); if(!v)return;
+
+  const medRows=(v.medicines||[]).map((m,i)=>`
+    <tr>
+      <td class="serial">${i+1}</td>
+      <td class="medicine-name">
+        <strong>${esc(m.name||"-")}</strong> ${esc(m.strength||"")}
+        ${m.generic?`<br><span class="generic">${esc(m.generic)}</span>`:""}
+        ${m.form?`<br><span class="form">${esc(m.form)}</span>`:""}
+        ${m.condition?`<br><span class="condition">(${esc(m.condition)})</span>`:""}
+      </td>
+      <td>${esc(m.frequency||"-")}</td>
+      <td>${esc(m.food||"-")}</td>
+      <td>${esc(m.duration||"-")}</td>
+    </tr>`).join("");
+
+  const dateText=new Date(v.date).toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'});
+
+  const html=`<!DOCTYPE html>
+<html lang="bn"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Prescription - ${esc(p.name)}</title>
+<style>
+@page{size:A4 portrait;margin:7mm}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;background:#fff;color:#172033}
+body{font-family:Arial,"Noto Sans Bengali",sans-serif;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.sheet{width:196mm;height:283mm;max-height:283mm;margin:0 auto;position:relative;overflow:hidden}
+.topbar{height:2.5mm;background:#0f766e}
+.header{padding:4mm 5mm 3mm;border:1px solid #dbe5e5;border-top:0;background:#f0fdfa}
+.doctor-row{display:flex;justify-content:space-between;gap:8mm;align-items:flex-start}
+.doctor-name{font-size:21pt;line-height:1.05;font-weight:800;color:#0f4f4b;margin:0 0 1mm}
+.degree{font-size:10pt;font-weight:700;color:#334155;margin-bottom:1mm}
+.contact{font-size:8.5pt;color:#475569;line-height:1.35}
+.clinic-box{text-align:right;font-size:7.5pt;color:#475569;line-height:1.35}
+.clinic-title{font-size:12pt;font-weight:800;color:#0f766e;margin-bottom:1mm}
+.rule{height:.4mm;background:#cde5e3;margin-top:2mm}
+.patient{margin:3mm 5mm 2.5mm;border:1px solid #cfe4e3;border-radius:2mm;overflow:hidden}
+.patient-head{background:#ecfdfb;padding:1.5mm 2.5mm;font-size:8.5pt;font-weight:800;color:#0f5f5a}
+.patient-grid{display:grid;grid-template-columns:2.0fr .65fr .8fr 1.25fr 1.25fr}
+.patient-cell{padding:1.8mm 2mm;border-top:1px solid #e5eeee;border-right:1px solid #e5eeee;min-height:12mm}
+.patient-cell:last-child{border-right:0}
+.label{display:block;font-size:6.5pt;color:#64748b;margin-bottom:.5mm}
+.value{font-size:8.5pt;font-weight:700;color:#172033;word-break:break-word}
+.body-grid{display:grid;grid-template-columns:50mm 1fr;gap:4mm;padding:0 5mm}
+.left-col{border-right:1px solid #dce8e8;padding-right:3.5mm}
+.right-col{min-width:0}
+.box{border:1px solid #dce8e8;border-radius:2mm;margin-bottom:2.5mm;overflow:hidden}
+.box-title{background:#f0fdfa;color:#0f5f5a;font-weight:800;font-size:9pt;padding:1.7mm 2.5mm;border-bottom:1px solid #dce8e8}
+.box-body{padding:2.2mm 2.5mm;font-size:8pt;line-height:1.45;min-height:10mm;white-space:pre-wrap}
+.vitals{display:grid;grid-template-columns:1fr 1fr;gap:1.5mm}
+.vital{border:1px solid #e2e8f0;border-radius:1.5mm;padding:1.5mm;font-size:7.5pt}
+.vital b{color:#0f766e}
+.rx-title{font-family:Georgia,serif;font-size:22pt;font-weight:700;font-style:italic;color:#0f4f4b;margin:0 0 1mm}
+.rx-sub{font-size:7.5pt;color:#64748b;margin-bottom:2mm}
+table{width:100%;border-collapse:collapse;border:1px solid #d9e6e6;font-size:7.7pt}
+th{background:#0f766e;color:#fff;text-align:left;padding:1.8mm 1.5mm;font-size:7.2pt}
+td{padding:1.8mm 1.5mm;border-top:1px solid #e5eeee;vertical-align:top;line-height:1.25}
+td+td{border-left:1px solid #eef3f3}
+.serial{width:7mm;text-align:center}
+.medicine-name{min-width:55mm}
+.generic,.form{font-size:6.8pt;color:#64748b}
+.condition{font-size:7pt;color:#334155;font-style:italic}
+.advice{border:1px solid #d9e6e6;border-left:1.2mm solid #14b8a6;border-radius:2mm;padding:2.2mm 2.5mm;margin-top:2.5mm;font-size:8pt;line-height:1.45;white-space:pre-wrap}
+.advice-title{font-weight:800;color:#0f766e;font-size:8.5pt;margin-bottom:1mm}
+.signature{margin-top:10mm;display:flex;justify-content:flex-end}
+.signature-box{text-align:center;width:42mm;font-size:7.5pt;color:#475569}
+.signature-line{border-top:1px solid #64748b;margin-bottom:1mm}
+.footer{position:absolute;bottom:0;left:0;right:0;border-top:1px solid #d6eeee;padding:2.2mm 5mm;color:#64748b;font-size:6.8pt;display:flex;justify-content:space-between;gap:5mm}
+.footer strong{color:#0f766e}
+.no-print{margin:10px 0;text-align:center}.no-print button{border:0;background:#0f766e;color:#fff;padding:9px 15px;border-radius:7px;font-weight:700;cursor:pointer}
+@media print{.no-print{display:none!important}}
+</style></head><body>
+<div class="no-print"><button onclick="window.print()">🖨 Print Prescription</button></div>
+<div class="sheet">
+  <div class="topbar"></div>
+  <header class="header">
+    <div class="doctor-row">
+      <div>
+        <div class="doctor-name">${esc(profile.name||"-")}</div>
+        <div class="degree">${esc(profile.degree||"")}</div>
+        <div class="contact">${esc([profile.phone1,profile.phone2].filter(Boolean).join(", "))}${profile.address?`<br>${esc(profile.address)}`:""}</div>
+      </div>
+      <div class="clinic-box">
+        <div class="clinic-title">${esc(profile.clinic||"-")}</div>
+        <div style="margin-top:1.5mm">Date: <strong>${dateText}</strong></div>
+      </div>
+    </div>
+    <div class="rule"></div>
+  </header>
+
+  <section class="patient">
+    <div class="patient-head">PATIENT INFORMATION</div>
+    <div class="patient-grid">
+      <div class="patient-cell"><span class="label">নাম</span><span class="value">${esc(p.name||"-")}</span></div>
+      <div class="patient-cell"><span class="label">বয়স</span><span class="value">${esc(p.age||"-")}</span></div>
+      <div class="patient-cell"><span class="label">লিঙ্গ</span><span class="value">${esc(p.gender||"-")}</span></div>
+      <div class="patient-cell"><span class="label">মোবাইল</span><span class="value">${esc(p.phone||"-")}</span></div>
+      <div class="patient-cell"><span class="label">PATIENT ID</span><span class="value">${esc(p.id||"-")}</span></div>
+    </div>
+  </section>
+
+  <main class="body-grid">
+    <aside class="left-col">
+      <div class="box">
+        <div class="box-title">CC — Chief Complaints</div>
+        <div class="box-body">${esc(v.symptoms||"-")}</div>
+      </div>
+
+      <div class="box">
+        <div class="box-title">O/E — On Examination</div>
+        <div class="box-body">
+          <div class="vitals">
+            <div class="vital"><b>BP</b><br>${esc(v.bp||"-")}</div>
+            <div class="vital"><b>Temp.</b><br>${esc(v.temperature||"-")}</div>
+            <div class="vital"><b>Weight</b><br>${esc(v.weight||"-")}</div>
+            <div class="vital"><b>Gender</b><br>${esc(p.gender||"-")}</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="box">
+        <div class="box-title">Diagnosis</div>
+        <div class="box-body">${esc(v.diagnosis||"-")}</div>
+      </div>
+
+      <div class="box">
+        <div class="box-title">Investigation</div>
+        <div class="box-body">${esc(v.investigation||"-")}</div>
+      </div>
+
+      <div class="box">
+        <div class="box-title">Advice</div>
+        <div class="box-body">${esc(v.advice||"-")}</div>
+      </div>
+
+      <div class="box">
+        <div class="box-title">Follow-up</div>
+        <div class="box-body"><strong>${esc(v.followUp||"-")}</strong></div>
+      </div>
+    </aside>
+
+    <section class="right-col">
+      <div class="rx-title">℞</div>
+      <div class="rx-sub">PRESCRIPTION / MEDICINES</div>
+      <table>
+        <thead><tr><th>#</th><th>Medicine</th><th>Frequency</th><th>Food</th><th>Duration</th></tr></thead>
+        <tbody>${medRows || '<tr><td colspan="5" style="text-align:center;color:#64748b">No medicine added</td></tr>'}</tbody>
+      </table>
+
+      <div class="signature">
+        <div class="signature-box">
+          <div class="signature-line"></div>
+          <strong>${esc(profile.name||"-")}</strong><br>${esc(profile.degree||"")}
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <span><strong>${esc(profile.clinic||"-")}</strong> • Prescription</span>
+    <span>Patient ID: ${esc(p.id||"-")}</span>
+  </footer>
+</div>
+</body></html>`;
+
+  const w=window.open("","_blank");
+  if(!w){toast("Browser popup blocked. Allow popups.");return;}
+  w.document.open(); w.document.write(html); w.document.close();
+}
+
+function updateBackupPatientSelect(){
+  const sel=document.getElementById("patientBackupSelect");
+  if(!sel)return;
+  sel.innerHTML='<option value="">Select Patient</option>'+
+    patients.slice().sort((a,b)=>a.name.localeCompare(b.name)).map(p=>
+      `<option value="${esc(p.id)}">${esc(p.name)} — ${esc(p.phone)} — ${esc(p.id)}</option>`
+    ).join("");
+}
+
+
+function safeFileName(name){
+  return String(name||"patient")
+    .replace(/[\/\\:*?"<>|]/g,"_")
+    .replace(/\s+/g,"_")
+    .slice(0,80);
+}
+
+function downloadJson(data, filename){
+  const blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement("a");
+  a.href=url;
+  a.download=filename;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  setTimeout(()=>URL.revokeObjectURL(url),1000);
+}
+
+function exportPatientFile(id){
+  const p=patients.find(x=>x.id===id);
+  if(!p){toast("Patient পাওয়া যায়নি");return;}
+  const data={
+    app:"Mariyam Shebaloy",
+    type:"patient-file",
+    version:1,
+    exportedAt:new Date().toISOString(),
+    patient:p
+  };
+  downloadJson(data,`${safeFileName(p.id)}_${safeFileName(p.name)}.json`);
+  toast("Patient file saved");
+}
+
+function importPatientFile(input){
+  const file=input.files?.[0];
+  if(!file)return;
+  const reader=new FileReader();
+
+  reader.onload=function(){
+    try{
+      const data=JSON.parse(reader.result);
+      const p=data?.patient;
+      if(!p || !p.id || !p.name){
+        toast("Invalid patient file");
+        input.value="";
+        return;
+      }
+
+      if(!Array.isArray(p.visits)) p.visits=[];
+
+      const existing=patients.findIndex(x=>x.id===p.id);
+      if(existing>=0){
+        if(confirm("এই Patient ID আগে থেকেই আছে। পুরোনো record-এর জায়গায় imported file বসাবেন?")){
+          patients[existing]=p;
+        }else{
+          input.value="";
+          return;
+        }
+      }else{
+        patients.push(p);
+      }
+
+      save(KEY_PATIENTS,patients);
+      updateBackupPatientSelect();
+      renderPatients();
+      toast("Patient file imported");
+    }catch(e){
+      toast("Patient file পড়া যায়নি");
+    }
+    input.value="";
+  };
+
+  reader.readAsText(file);
+}
+
+function backupAll(){
+  const data={
+    app:"Mariyam Shebaloy",
+    version:6,
+    exportedAt:new Date().toISOString(),
+    profile:profile,
+    patients:patients,
+    customMedicines:medicines.filter(m=>m.custom===true || m.source==="User added"),
+    templates:templates
+  };
+  const blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement("a");
+  const d=new Date().toISOString().slice(0,10);
+  a.href=url;a.download="mariyam-shebaloy-backup-"+d+".json";
+  document.body.appendChild(a);a.click();a.remove();
+  URL.revokeObjectURL(url);
+  toast("Full backup created");
+}
+
+function backupSinglePatient(){
+  const id=document.getElementById("patientBackupSelect").value;
+  const p=patients.find(x=>x.id===id);
+  if(!p){toast("একজন patient select করুন");return;}
+  const data={
+    app:"Mariyam Shebaloy",
+    type:"single-patient-backup",
+    version:1,
+    exportedAt:new Date().toISOString(),
+    patient:p
+  };
+  downloadJson(data,`${safeFileName(p.id)}_${safeFileName(p.name)}.json`);
+  toast("Patient backup created");
+}
+
+function restoreAll(input){
+  const file=input.files?.[0];
+  if(!file)return;
+  const reader=new FileReader();
+  reader.onload=async function(){
+    try{
+      const data=JSON.parse(reader.result);
+      if(data.type==="single-patient-backup" && data.patient){
+        const existing=patients.findIndex(p=>p.id===data.patient.id);
+        if(existing>=0) patients[existing]=data.patient;
+        else patients.push(data.patient);
+        save(KEY_PATIENTS,patients);
+        updateBackupPatientSelect();
+        renderPatients();
+        toast("Patient restored");
+      } else if(data.app==="Mariyam Shebaloy" && Array.isArray(data.patients)){
+        if(data.profile){
+          profile={...DEFAULT_PROFILE,...data.profile};
+          save(KEY_PROFILE,profile);
+          applyProfileToHeader();
+        }
+        const map=new Map(patients.map(p=>[p.id,p]));
+        data.patients.forEach(p=>map.set(p.id,p));
+        patients=[...map.values()];
+
+        if(Array.isArray(data.medicines)){
+          const mm=new Map(medicines.map(m=>[m.id,m]));
+          data.medicines.forEach(m=>mm.set(m.id,m));
+          medicines=[...mm.values()].map(m=>({...m,generic:m.generic||""}));
+        }
+
+        if(Array.isArray(data.templates)){
+          const tm=new Map(templates.map(t=>[t.id,t]));
+          data.templates.forEach(t=>tm.set(t.id,t));
+          templates=[...tm.values()];
+        }
+
+        save(KEY_PATIENTS,patients);
+        save(KEY_MEDICINES,medicines);
+        save(KEY_TEMPLATES,templates);
+        updateBackupPatientSelect();
+        renderPatients();
+        renderMedicines();
+        renderTemplates();
+        fillDiseaseList();
+        toast("Backup restored");
+      } else {
+        toast("Invalid backup file");
+      }
+    }catch(e){
+      toast("Backup file পড়া যায়নি");
+    }
+    input.value="";
+  };
+  reader.readAsText(file);
+}
+
+function clearAllData(){
+  if(!confirm("সব Local Data permanently delete করবেন? আগে backup নিয়েছেন তো?"))return;
+  localStorage.removeItem(KEY_PATIENTS);
+  localStorage.removeItem(KEY_MEDICINES);
+  localStorage.removeItem(KEY_TEMPLATES);
+  localStorage.removeItem(KEY_PROFILE);
+  patients=[];medicines=[];templates=[];profile={...DEFAULT_PROFILE};
+  applyProfileToHeader();
+  updateBackupPatientSelect();
+  renderPatients();renderMedicines();renderTemplates();fillDiseaseList();
+  toast("All local data deleted");
+}
+
+function addCustomTemplateMedicineRow(data={}){
+  const row=document.createElement("div");
+  row.className="medicine-row";
+  row.dataset.type="custom";
+  row.innerHTML=`
+    <div class="medicine-grid">
+      <input class="tpl-custom-name" placeholder="Custom Brand Name" value="${esc(data.name||"")}">
+      <input class="tpl-custom-strength" placeholder="Strength" value="${esc(data.strength||"")}">
+      <input class="tpl-custom-form" placeholder="Form" value="${esc(data.form||"")}">
+      <input class="tpl-med-frequency" placeholder="Frequency" value="${esc(data.frequency||"")}">
+    </div>
+    <div class="medicine-grid" style="margin-top:8px">
+      <select class="tpl-med-food"><option value="">Food</option><option>Before food</option><option>After food</option><option>With food</option><option>Any time</option></select>
+      <input class="tpl-med-duration" placeholder="Duration" value="${esc(data.duration||"")}">
+      <div></div><div></div>
+    </div>
+    <div class="small" style="margin-top:6px">Custom medicine template-এ থাকবে; Database-এ automatically যোগ হবে না।</div>
+    <button class="btn danger" style="margin-top:8px" onclick="this.parentElement.remove()">Remove</button>`;
+  document.getElementById("templateMedicines").appendChild(row);
+  if(data.food) row.querySelector(".tpl-med-food").value=data.food;
+}
+
+function addTemplateMedicineRow(data={}){
+  const row=document.createElement("div");
+  row.className="medicine-row";
+  const options=medicines.map(m=>`<option value="${esc(m.id)}">${esc(m.name)} ${esc(m.strength||"")} — ${esc(m.generic||"Generic not set")} (${esc(m.form||"")})</option>`).join("");
+  row.innerHTML=`
+    <div class="medicine-grid">
+      <select class="tpl-med-select"><option value="">Select medicine</option>${options}</select>
+      <input class="tpl-med-frequency" placeholder="Frequency" value="${esc(data.frequency||"")}">
+      <select class="tpl-med-food">
+        <option value="">Food</option>
+        <option>Before food</option>
+        <option>After food</option>
+        <option>With food</option>
+        <option>Any time</option>
+      </select>
+      <input class="tpl-med-duration" placeholder="Duration" value="${esc(data.duration||"")}">
+    </div>
+    <button class="btn danger" style="margin-top:8px" onclick="this.parentElement.remove()">Remove</button>`;
+  document.getElementById("templateMedicines").appendChild(row);
+  if(data.medicineId) row.querySelector(".tpl-med-select").value=data.medicineId;
+  if(data.food) row.querySelector(".tpl-med-food").value=data.food;
+}
+
+document.addEventListener("change",function(e){
+  if(!e.target.classList.contains("tpl-med-select"))return;
+  const m=medicines.find(x=>x.id===e.target.value);
+  if(!m)return;
+  const row=e.target.closest(".medicine-row");
+  row.querySelector(".tpl-med-frequency").value=m.frequency||"";
+  row.querySelector(".tpl-med-food").value=m.food||"";
+  row.querySelector(".tpl-med-duration").value=m.duration||"";
+});
+
+function saveTemplate(){
+  const disease=document.getElementById("tDisease").value.trim();
+  if(!disease){toast("Disease / Diagnosis name দিন");return;}
+
+  const templateMeds=[...document.querySelectorAll("#templateMedicines .medicine-row")].map(row=>{
+    if(row.dataset.type==="custom"){
+      const name=row.querySelector(".tpl-custom-name").value.trim();
+      if(!name)return null;
+      return {medicineId:"CUSTOM",custom:true,name,strength:row.querySelector(".tpl-custom-strength").value.trim(),form:row.querySelector(".tpl-custom-form").value.trim(),frequency:row.querySelector(".tpl-med-frequency").value.trim(),food:row.querySelector(".tpl-med-food").value,duration:row.querySelector(".tpl-med-duration").value.trim()};
+    }
+    const id=row.querySelector(".tpl-med-select").value;
+    if(!id)return null;
+    return {medicineId:id,frequency:row.querySelector(".tpl-med-frequency").value.trim(),food:row.querySelector(".tpl-med-food").value,duration:row.querySelector(".tpl-med-duration").value.trim()};
+  }).filter(Boolean);
+
+  const existing=templates.findIndex(t=>t.disease.toLowerCase()===disease.toLowerCase());
+  const item={
+    id:existing>=0 ? templates[existing].id : uid("T-"),
+    disease,
+    medicines:templateMeds,
+    advice:document.getElementById("tAdvice").value.trim()
+  };
+
+  if(existing>=0) templates[existing]=item;
+  else templates.push(item);
+
+  save(KEY_TEMPLATES,templates);
+  document.getElementById("tDisease").value="";
+  document.getElementById("tAdvice").value="";
+  document.getElementById("templateMedicines").innerHTML="";
+  renderTemplates();
+  fillDiseaseList();
+  toast(existing>=0 ? "Template updated" : "Template saved");
+}
+
+function renderTemplates(){
+  const box=document.getElementById("templateList");
+  if(!templates.length){
+    box.innerHTML='<div class="empty">No disease templates yet. Add one above.</div>';
+    return;
+  }
+  box.innerHTML=templates.slice().reverse().map(t=>`
+    <div class="list-item">
+      <div class="row">
+        <div>
+          <b>${esc(t.disease)}</b>
+          <div class="small">${(t.medicines||[]).length} medicine(s)</div>
+        </div>
+        <div>
+          <button class="btn primary" onclick="editTemplate('${t.id}')">Edit</button>
+          <button class="btn danger" onclick="deleteTemplate('${t.id}')">Delete</button>
+        </div>
+      </div>
+      ${(t.medicines||[]).length ? `<ul>${t.medicines.map(m=>{
+        const med=medicines.find(x=>x.id===m.medicineId);
+        const label=m.custom ? `${m.name||"Custom Medicine"} ${m.strength||""}` : (med ? med.name+" "+(med.strength||"")+" — "+(med.generic||"") : "Medicine not found");
+        return `<li>${esc(label)} — ${esc(m.frequency||"-")} • ${esc(m.food||"-")} • ${esc(m.duration||"-")}</li>`;
+      }).join("")}</ul>`:""}
+      ${t.advice ? `<div class="small"><b>Advice:</b> ${esc(t.advice)}</div>`:""}
+    </div>`).join("");
+}
+
+function editTemplate(id){
+  const t=templates.find(x=>x.id===id);
+  if(!t)return;
+  document.getElementById("tDisease").value=t.disease;
+  document.getElementById("tAdvice").value=t.advice||"";
+  const box=document.getElementById("templateMedicines");
+  box.innerHTML="";
+  (t.medicines||[]).forEach(m=>m.custom ? addCustomTemplateMedicineRow(m) : addTemplateMedicineRow(m));
+  window.scrollTo(0,0);
+}
+
+function deleteTemplate(id){
+  if(!confirm("এই disease template delete করবেন?"))return;
+  templates=templates.filter(t=>t.id!==id);
+  save(KEY_TEMPLATES,templates);
+  renderTemplates();
+  fillDiseaseList();
+  toast("Template deleted");
+}
+
+function applyDiseaseTemplate(){
+  const disease=document.getElementById("vDiagnosis").value.trim().toLowerCase();
+  const t=templates.find(x=>x.disease.toLowerCase()===disease);
+  if(!t)return;
+  const box=document.getElementById("visitMedicines");
+  box.innerHTML="";
+  (t.medicines||[]).forEach(m=>m.custom ? addCustomMedicineRow(m) : addMedicineRow(m));
+  if(t.advice) document.getElementById("vAdvice").value=t.advice;
+  toast("Template loaded — review before saving");
+}
+
+
+// =========================
+// DGDA DATABASE: IndexedDB
+// The 100 MB medicines.json is NOT stored in localStorage.
+// =========================
+const DGDA_DB_NAME="MyClinicDGDA";
+const DGDA_STORE="medicines";
+
+function normalizeMedicine(m){
+  const raw=m.raw||{};
+  const ex=raw.extras||{};
+  return {...m,
+    id:String(m.id||raw.id||uid("DGDA-")),
+    name:m.brandName||m.name||raw.display_name||ex.trade_name||"Unnamed",
+    brandName:m.brandName||m.name||raw.display_name||ex.trade_name||"",
+    generic:m.genericName||m.generic||ex.generic_content_raw||"",
+    manufacturer:m.manufacturer||ex.company||"",
+    strength:m.strength||"",
+    form:m.dosageForm||m.form||ex.dosage_form||"",
+    darNumber:m.darNumber||ex.dar_number||"",
+    registrationStatus:m.registrationStatus||"",
+    source:m.source||raw.source||"DGHS National OCL / DGDA",
+    sourceUrl:m.sourceUrl||raw.source_url||"",
+    custom:false,
+    raw
+  };
+}
+
+function openDGDAStore(){
+  return new Promise((resolve,reject)=>{
+    if(!window.indexedDB){reject(new Error("IndexedDB unavailable"));return;}
+    const req=indexedDB.open(DGDA_DB_NAME,1);
+    req.onupgradeneeded=()=>{const db=req.result;if(!db.objectStoreNames.contains(DGDA_STORE))db.createObjectStore(DGDA_STORE,{keyPath:"id"});};
+    req.onsuccess=()=>resolve(req.result); req.onerror=()=>reject(req.error||new Error("IndexedDB error"));
+  });
+}
+
+async function putDGDAInIndexedDB(db){
+  const idb=await openDGDAStore();
+  await new Promise((resolve,reject)=>{
+    const tx=idb.transaction(DGDA_STORE,"readwrite"); const store=tx.objectStore(DGDA_STORE);
+    store.clear();
+    // Chunk writes so the 39k records do not create one giant transaction payload.
+    for(let i=0;i<db.length;i+=500){
+      const chunk=db.slice(i,i+500).map(normalizeMedicine);
+      chunk.forEach(m=>store.put(m));
+    }
+    tx.oncomplete=resolve; tx.onerror=()=>reject(tx.error||new Error("IndexedDB write failed"));
+  });
+  idb.close();
+}
+
+async function getAllDGDA(){
+  const idb=await openDGDAStore();
+  return await new Promise((resolve,reject)=>{
+    const tx=idb.transaction(DGDA_STORE,"readonly"); const req=tx.objectStore(DGDA_STORE).getAll();
+    req.onsuccess=()=>{idb.close();resolve(req.result||[])}; req.onerror=()=>{idb.close();reject(req.error)};
+  });
+}
+
+function saveLocalCustomMedicines(){
+  const custom=medicines.filter(m=>m.custom===true || m.source==="User added");
+  save(KEY_MEDICINES,custom);
+}
+function dedupeMedicinesInMemory(){
+  const map=new Map(); medicines.forEach(m=>map.set(String(m.id),m)); medicines=[...map.values()];
+}
+function resetMedicineForm(){
+  ["mName","mGeneric","mManufacturer","mClass","mStrength","mForm","mFrequency","mDuration"].forEach(x=>{const el=document.getElementById(x);if(el)el.value="";});
+  if(document.getElementById("mFood"))document.getElementById("mFood").value="";
+  const btn=document.querySelector('#medicines button.btn.primary');
+  if(btn){btn.textContent="＋ Save Medicine";btn.onclick=addMedicine;}
+}
+
+async function loadMedicineDatabase(){
+  const status=document.getElementById("medicineDbStatus");
+  try{
+    const db=await getAllDGDA();
+    dgdaMedicines=db.map(normalizeMedicine);
+    const custom=load(KEY_MEDICINES,[]).filter(m=>m.custom===true || m.source==="User added");
+    medicines=[...custom,...dgdaMedicines];
+    dedupeMedicinesInMemory();
+    medicineDbReady=dgdaMedicines.length>0;
+    if(status) status.innerHTML=medicineDbReady
+      ? `✅ DGDA medicine database ready: <b>${dgdaMedicines.length.toLocaleString()}</b> medicines. You can search by brand/generic/manufacturer/DAR number.`
+      : `⚠️ DGDA database is not loaded yet. Tap <b>Load medicines.json</b> and select your 39,195-record file.`;
+    renderMedicines();
+  }catch(e){
+    console.warn("DGDA IndexedDB load failed",e);
+    medicines=load(KEY_MEDICINES,[]).filter(m=>m.custom===true || m.source==="User added");
+    if(status) status.innerHTML=`⚠️ Database not loaded. Tap <b>Load medicines.json</b> to import it.`;
+    renderMedicines();
+  }
+}
+
+fillDiseaseList();
+renderTemplates();
+renderPatients();
+
+document.addEventListener("click",function(e){
+  document.querySelectorAll(".investigation-menu,.autocomplete-menu").forEach(menu=>{
+    const wrap=menu.parentElement;
+    if(wrap && !wrap.contains(e.target)) menu.classList.add("hidden");
+  });
+  const btn=e.target.closest(".remove-investigation");
+  if(btn){
+    const inputId=btn.dataset.input;
+    const index=Number(btn.dataset.index);
+    removeInvestigation(inputId,index);
+  }
+},true);
+updateBackupPatientSelect();
+applyProfileToHeader();
+loadMedicineDatabase();
+</script>
+
+</body>
+</html>
