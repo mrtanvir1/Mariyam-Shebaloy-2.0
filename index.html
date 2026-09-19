@@ -7,7 +7,7 @@
 <link rel="manifest" href="./manifest.json">
 <link rel="icon" type="image/png" sizes="192x192" href="./icons/icon-192.png">
 <link rel="apple-touch-icon" href="./icons/icon-192.png">
-<title>Mariyam Shebaloy — Personal Clinic Management System — V6</title>
+<title>Mariyam Shebaloy — Personal Clinic Management System — V6.2</title>
 <style>
 *{box-sizing:border-box}
 body{margin:0;font-family:Arial,"Noto Sans Bengali",sans-serif;background:#f4f7fb;color:#1f2937}
@@ -1862,6 +1862,17 @@ async function loadMedicineDatabase(){
     if(status) status.innerHTML=`⚠️ Database not loaded. Tap <b>Load medicines.json</b> to import it.`;
     renderMedicines();
   }
+}
+
+// Register service worker so Chrome can recognize and control the PWA.
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("./sw.js", {scope: "./"})
+      .then(reg => {
+        if (reg.waiting) reg.waiting.postMessage({type:"SKIP_WAITING"});
+      })
+      .catch(err => console.warn("Service worker registration failed:", err));
+  });
 }
 
 fillDiseaseList();
