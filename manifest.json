@@ -2,11 +2,17 @@
   "name": "Mariyam Shebaloy",
   "short_name": "Mariyam Shebaloy",
   "description": "Personal Clinic Management System",
-  "start_url": "./?v=6.1",
+  "start_url": "./",
   "scope": "./",
+  "id": "./",
   "display": "standalone",
+  "display_override": [
+    "window-controls-overlay",
+    "standalone"
+  ],
   "background_color": "#f4f7fb",
   "theme_color": "#2563eb",
+  "prefer_related_applications": false,
   "icons": [
     {
       "src": "./icon-192.png",

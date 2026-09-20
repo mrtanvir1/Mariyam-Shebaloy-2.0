@@ -97,7 +97,15 @@ hr{border:0;border-top:1px solid #e5e7eb;margin:18px 0}
     </div>
   </div>
   <button class="btn secondary" style="width:100%;margin-top:14px;font-size:16px" onclick="showPage('profile')">👤 Settings / Profile</button>
-  <button class="btn secondary" style="width:100%;margin-top:10px;font-size:16px" onclick="showPage('templates')">⚙️ Disease Templates</button>
+  <button class="btn secondary" style="width:100%;margin-top:10px;font-size:16px" onclick="showPage('templates')">⚙️ 
+<div class="card dashboard-profile-card" id="dashboardProfileCard"
+     style="cursor:pointer" onclick="showPage('profile')">
+  <div style="font-size:30px">👤</div>
+  <h3 style="margin:8px 0 4px">Settings / Profile</h3>
+  <div style="opacity:.78">নাম, নম্বর, পদবি, ঠিকানা ও ক্লিনিকের তথ্য পরিবর্তন</div>
+</div>
+
+Disease Templates</button>
   <button class="btn secondary" style="width:100%;margin-top:10px;font-size:16px" onclick="showPage('backup')">💾 Backup & Restore</button>
 </section>
 
@@ -1048,187 +1056,7 @@ th,td{border:1px solid #ccc;padding:9px;text-align:left}
 <div class="sig">Doctor's Signature<br><br>______________________</div>
 <script>window.onload=function(){setTimeout(function(){window.print()},300)}<\/script>
 
-<script>
-/* ===== Mariyam Shebaloy: IndexedDB medicine catalogue ===== */
-const MED_DB_NAME = "MariyamShebaloyMedicineDB";
-const MED_DB_VERSION = 1;
-const MED_STORE = "medicines";
-let medDb = null;
-let medMode = "brand";
-let medLetter = "";
 
-function openMedDB(){
-  return new Promise((resolve,reject)=>{
-    if(medDb) return resolve(medDb);
-    const req=indexedDB.open(MED_DB_NAME, MED_DB_VERSION);
-    req.onupgradeneeded=()=>{
-      const db=req.result;
-      if(!db.objectStoreNames.contains(MED_STORE)){
-        const st=db.createObjectStore(MED_STORE,{keyPath:"id"});
-        st.createIndex("brand","brandName",{unique:false});
-        st.createIndex("generic","genericName",{unique:false});
-      }
-    };
-    req.onsuccess=()=>{medDb=req.result;resolve(medDb)};
-    req.onerror=()=>reject(req.error);
-  });
-}
-function medPutAll(items){
-  return openMedDB().then(db=>new Promise((resolve,reject)=>{
-    const tx=db.transaction(MED_STORE,"readwrite"), st=tx.objectStore(MED_STORE);
-    for(const raw of items){
-      const m=normalizeDGDA(raw);
-      if(m.id) st.put(m);
-    }
-    tx.oncomplete=resolve; tx.onerror=()=>reject(tx.error);
-  }));
-}
-function normalizeDGDA(m){
-  const raw=m.raw||{};
-  const ex=raw.extras||{};
-  return {
-    id:String(m.id||raw.id||uid("M-")),
-    brandName:String(m.brandName||m.name||raw.display_name||ex.trade_name||"").trim(),
-    genericName:String(m.genericName||m.generic||ex.generic_content_raw||"").trim(),
-    manufacturer:String(m.manufacturer||ex.company||"").trim(),
-    strength:String(m.strength||"").trim(),
-    dosageForm:String(m.dosageForm||m.form||ex.dosage_form||"").trim(),
-    description:String(m.description||"").trim(),
-    darNumber:String(m.darNumber||ex.dar_number||"").trim(),
-    registrationStatus:String(m.registrationStatus||"").trim(),
-    country:String(m.country||"Bangladesh").trim(),
-    source:String(m.source||"DGHS National OCL / DGDA").trim(),
-    raw:raw
-  };
-}
-function medGetAll(){
-  return openMedDB().then(db=>new Promise((resolve,reject)=>{
-    const req=db.transaction(MED_STORE,"readonly").objectStore(MED_STORE).getAll();
-    req.onsuccess=()=>resolve(req.result||[]);
-    req.onerror=()=>reject(req.error);
-  }));
-}
-function medGet(id){
-  return openMedDB().then(db=>new Promise((resolve,reject)=>{
-    const req=db.transaction(MED_STORE,"readonly").objectStore(MED_STORE).get(id);
-    req.onsuccess=()=>resolve(req.result);
-    req.onerror=()=>reject(req.error);
-  }));
-}
-function medCount(){
-  return openMedDB().then(db=>new Promise((resolve,reject)=>{
-    const req=db.transaction(MED_STORE,"readonly").objectStore(MED_STORE).count();
-    req.onsuccess=()=>resolve(req.result);
-    req.onerror=()=>reject(req.error);
-  }));
-}
-function importMedicineDatabase(input){
-  const file=input.files?.[0]; if(!file)return;
-  const reader=new FileReader();
-  reader.onload=async function(){
-    try{
-      const db=JSON.parse(reader.result);
-      if(!Array.isArray(db)) throw new Error("Invalid database");
-      toast("Importing "+db.length.toLocaleString()+" medicines…");
-      await medPutAll(db);
-      renderMedicines();
-      toast(db.length.toLocaleString()+" medicines imported");
-    }catch(e){
-      console.error(e); toast("Medicine database import failed");
-    }
-    input.value="";
-  };
-  reader.readAsText(file);
-}
-async function medicineOptions(selected=""){
-  const db=await medGetAll();
-  const arr=db.sort((a,b)=>a.brandName.localeCompare(b.brandName));
-  return arr.map(m=>`<option value="${esc(m.id)}" ${m.id===selected?"selected":""}>${esc(m.brandName)}${m.strength?" "+esc(m.strength):""}${m.genericName?" — "+esc(m.genericName):""}</option>`).join("");
-}
-async function addMedicineRow(data={}){
-  const row=document.createElement("div");
-  row.className="medicine-row"; row.dataset.type="database";
-  row.innerHTML=`<div class="medicine-grid">
-    <select class="med-select"><option value="">Loading medicines…</option></select>
-    <input class="med-frequency" placeholder="Frequency" value="${esc(data.frequency||"")}">
-    <select class="med-food"><option value="">Food</option><option>Before food</option><option>After food</option><option>With food</option><option>Any time</option></select>
-    <input class="med-duration" placeholder="Duration" value="${esc(data.duration||"")}">
-  </div><button class="btn danger" style="margin-top:8px" onclick="this.parentElement.remove()">Remove</button>`;
-  document.getElementById("visitMedicines").appendChild(row);
-  row.querySelector(".med-select").innerHTML='<option value="">Select medicine</option>'+await medicineOptions(data.medicineId||"");
-  if(data.food) row.querySelector(".med-food").value=data.food;
-}
-async function addTemplateMedicineRow(data={}){
-  const row=document.createElement("div"); row.className="medicine-row";
-  row.innerHTML=`<div class="medicine-grid">
-    <select class="tpl-med-select"><option value="">Loading medicines…</option></select>
-    <input class="tpl-med-frequency" placeholder="Frequency" value="${esc(data.frequency||"")}">
-    <select class="tpl-med-food"><option value="">Food</option><option>Before food</option><option>After food</option><option>With food</option><option>Any time</option></select>
-    <input class="tpl-med-duration" placeholder="Duration" value="${esc(data.duration||"")}">
-  </div><button class="btn danger" style="margin-top:8px" onclick="this.parentElement.remove()">Remove</button>`;
-  document.getElementById("templateMedicines").appendChild(row);
-  row.querySelector(".tpl-med-select").innerHTML='<option value="">Select medicine</option>'+await medicineOptions(data.medicineId||"");
-  if(data.medicineId) row.querySelector(".tpl-med-select").value=data.medicineId;
-  if(data.food) row.querySelector(".tpl-med-food").value=data.food;
-}
-async function openMedicineDetail(id){
-  const m=await medGet(id);
-  if(!m)return;
-  const ex=m.raw?.extras||{};
-  const field=(label,val)=>`<div class="list-item"><b>${label}</b><p>${esc(val||"Not available").replace(/\n/g,"<br>")}</p></div>`;
-  const box=document.getElementById("medicineDetailBox");
-  box.innerHTML=`<div class="row"><div><h2 class="section-title">${esc(m.brandName)}</h2><div class="small"><b>Generic:</b> ${esc(m.genericName||"Not available")}</div></div><button class="btn secondary" onclick="showPage('medicines')">← Back</button></div>
-  <div class="mdb-detail-grid">
-    ${field("Manufacturer",m.manufacturer)}
-    ${field("Strength",m.strength)}
-    ${field("Dosage Form",m.dosageForm)}
-    ${field("DAR Number",m.darNumber)}
-    ${field("Registration Status",m.registrationStatus)}
-    ${field("Country",m.country)}
-  </div>
-  ${field("Description",m.description)}
-  ${field("DGDA Trade Name",ex.trade_name)}
-  ${field("DGDA Generic Content",ex.generic_content_raw)}
-  ${field("DGDA Company",ex.company)}
-  ${field("DGDA Dosage Form",ex.dosage_form)}
-  ${field("Source",m.source)}
-  <div class="notice">Prescription-এ এই medicine-এর জন্য শুধু Brand Name ব্যবহার করা হবে; Generic Name database details-এ থাকবে।</div>`;
-  showPage("medicineDetail");
-}
-function sortMedicineMode(mode){medMode=mode;medLetter="";renderMedicines();}
-function clearMedicineFilter(){document.getElementById("medicineSearch").value="";medLetter="";renderMedicines();}
-async function renderMedicines(){
-  const box=document.getElementById("medicineList"); if(!box)return;
-  const all=await medGetAll();
-  const q=(document.getElementById("medicineSearch")?.value||"").toLowerCase().trim();
-  let list=all.filter(m=>{
-    const hay=[m.brandName,m.genericName,m.manufacturer,m.darNumber,m.dosageForm].join(" ").toLowerCase();
-    return !q || hay.includes(q);
-  });
-  if(medLetter) list=list.filter(m=>(m.brandName||"").toUpperCase().startsWith(medLetter));
-  list.sort((a,b)=>{
-    const aa=(medMode==="generic"?a.genericName:a.brandName)||"";
-    const bb=(medMode==="generic"?b.genericName:b.brandName)||"";
-    return aa.localeCompare(bb);
-  });
-  document.getElementById("medicineCount").textContent=`${list.length.toLocaleString()} shown • ${all.length.toLocaleString()} total`;
-  const letters="ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
-  document.getElementById("medicineLetterBar").innerHTML=letters.map(l=>`<button class="mdb-letter ${medLetter===l?"active":""}" onclick="medLetter='${l}';renderMedicines()">${l}</button>`).join("");
-  const LIMIT=100;
-  const shown=list.slice(0,LIMIT);
-  box.innerHTML=shown.length?shown.map(m=>`<div class="mdb-card"><div class="row"><div style="flex:1"><b>${esc(m.brandName||"Unnamed")}</b>${m.strength?" "+esc(m.strength):""}<div class="mdb-meta"><b>Generic:</b> ${esc(m.genericName||"Not available")} ${m.manufacturer?"• "+esc(m.manufacturer):""} ${m.dosageForm?"• "+esc(m.dosageForm):""}</div>${m.darNumber?`<div class="mdb-meta">DAR: ${esc(m.darNumber)}</div>`:""}</div><button class="btn primary" onclick="openMedicineDetail('${esc(m.id)}')">View Details</button></div></div>`).join(""):`<div class="empty">No medicines found.</div>`;
-  if(list.length>LIMIT) box.innerHTML+=`<div class="small" style="text-align:center;padding:12px">Showing first ${LIMIT}. Search more specifically to narrow the result.</div>`;
-}
-async function loadMedicineDatabase(){
-  // The 100MB JSON is selected manually to avoid file:// fetch/CORS issues.
-  try{ await openMedDB(); const c=await medCount(); if(c) renderMedicines(); }catch(e){console.error(e);}
-}
-</script>
-<script>
-if("serviceWorker" in navigator && location.protocol !== "file:"){
-  window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js?v=6.1").catch(()=>{}));
-}
-</script>
 </body></html>`;
 
   const w=window.open("","_blank");

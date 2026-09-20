@@ -1,25 +1,18 @@
-# Mariyam Shebaloy — Final Fixed V6
+# Mariyam Shebaloy — V6.2 Fixed
 
-GitHub Pages / PWA-ready version.
-
-Files:
-- `index.html` — main application
-- `manifest.json` — installable web-app manifest
-- `sw.js` — service worker for PWA/offline shell
-- `.nojekyll` — prevents Jekyll processing
-- `icon-192.png`, `icon-512.png` — app icons
+GitHub Pages/PWA build.
 
 Dashboard includes:
 - আজকের দেখা রোগী
 - মোট রোগী
 - মোট প্রেসক্রিপশন
+- Patients
+- Medicines
+- Prescriptions
+- Visit History
 - Settings / Profile
+- Disease Templates
+- Backup & Restore
 
-Settings / Profile lets you change:
-- Doctor name
-- Degree/title
-- Two phone numbers
-- Clinic name
-- Address
-
-The changed profile information is used in new prescription printouts.
+Settings/Profile controls doctor name, title/degree, two phone numbers,
+clinic name and address; those values are used for prescription output.
