@@ -92,6 +92,9 @@ hr{border:0;border-top:1px solid #e5e7eb;margin:18px 0}
     <div class="card" onclick="showPage('history')" style="cursor:pointer">
       <h2>📋</h2><b>Visit History</b><div class="small">Previous visits</div>
     </div>
+    <div class="card" onclick="showPage('profile')" style="cursor:pointer">
+      <h2>👤</h2><b>Settings / Profile</b><div class="small">নাম, নম্বর, পদবি, ঠিকানা ও ক্লিনিকের তথ্য পরিবর্তন</div>
+    </div>
   </div>
   <button class="btn secondary" style="width:100%;margin-top:14px;font-size:16px" onclick="showPage('profile')">👤 Settings / Profile</button>
   <button class="btn secondary" style="width:100%;margin-top:10px;font-size:16px" onclick="showPage('templates')">⚙️ Disease Templates</button>
@@ -1223,7 +1226,7 @@ async function loadMedicineDatabase(){
 </script>
 <script>
 if("serviceWorker" in navigator && location.protocol !== "file:"){
-  window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js").catch(()=>{}));
+  window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js?v=6.1").catch(()=>{}));
 }
 </script>
 </body></html>`;
