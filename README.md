@@ -1,18 +1,6 @@
-# Mariyam Shebaloy — V6.2 Fixed
+# Mariyam Shebaloy V6.3 — Install Fixed
 
-GitHub Pages/PWA build.
-
-Dashboard includes:
-- আজকের দেখা রোগী
-- মোট রোগী
-- মোট প্রেসক্রিপশন
-- Patients
-- Medicines
-- Prescriptions
-- Visit History
-- Settings / Profile
-- Disease Templates
-- Backup & Restore
-
-Settings/Profile controls doctor name, title/degree, two phone numbers,
-clinic name and address; those values are used for prescription output.
+This build explicitly links `manifest.json` and registers `sw.js` from `index.html`.
+Upload every file in this folder to the GitHub Pages repository root.
+After deployment, open the HTTPS GitHub Pages URL in Chrome and install from the
+browser menu. If an older PWA is already installed, uninstall it first.
