@@ -4,15 +4,9 @@
   "description": "Personal Clinic Management System",
   "start_url": "./",
   "scope": "./",
-  "id": "./",
   "display": "standalone",
-  "display_override": [
-    "window-controls-overlay",
-    "standalone"
-  ],
   "background_color": "#f4f7fb",
   "theme_color": "#2563eb",
-  "prefer_related_applications": false,
   "icons": [
     {
       "src": "./icon-192.png",

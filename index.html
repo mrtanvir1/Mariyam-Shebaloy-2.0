@@ -52,12 +52,10 @@ hr{border:0;border-top:1px solid #e5e7eb;margin:18px 0}
 .mdb-detail-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
 @media(max-width:650px){.mdb-detail-grid{grid-template-columns:1fr}}
 </style>
-
 <link rel="manifest" href="./manifest.json">
 <meta name="theme-color" content="#2563eb">
-<link rel="icon" type="image/png" sizes="192x192" href="./icon-192.png">
+<link rel="icon" href="./icon-192.png" sizes="192x192">
 <link rel="apple-touch-icon" href="./icon-192.png">
-
 </head>
 <body>
 
@@ -103,15 +101,7 @@ hr{border:0;border-top:1px solid #e5e7eb;margin:18px 0}
     </div>
   </div>
   <button class="btn secondary" style="width:100%;margin-top:14px;font-size:16px" onclick="showPage('profile')">👤 Settings / Profile</button>
-  <button class="btn secondary" style="width:100%;margin-top:10px;font-size:16px" onclick="showPage('templates')">⚙️ 
-<div class="card dashboard-profile-card" id="dashboardProfileCard"
-     style="cursor:pointer" onclick="showPage('profile')">
-  <div style="font-size:30px">👤</div>
-  <h3 style="margin:8px 0 4px">Settings / Profile</h3>
-  <div style="opacity:.78">নাম, নম্বর, পদবি, ঠিকানা ও ক্লিনিকের তথ্য পরিবর্তন</div>
-</div>
-
-Disease Templates</button>
+  <button class="btn secondary" style="width:100%;margin-top:10px;font-size:16px" onclick="showPage('templates')">⚙️ Disease Templates</button>
   <button class="btn secondary" style="width:100%;margin-top:10px;font-size:16px" onclick="showPage('backup')">💾 Backup & Restore</button>
 </section>
 
@@ -1060,18 +1050,8 @@ th,td{border:1px solid #ccc;padding:9px;text-align:left}
 <tbody>${medRows || '<tr><td colspan="5">No medicine added</td></tr>'}</tbody></table>
 <p style="margin-top:25px"><b>Doctor's Advice:</b><br>${esc(v.advice||"-").replace(/\n/g,"<br>")}</p>
 <div class="sig">Doctor's Signature<br><br>______________________</div>
-<script>window.onload=function(){setTimeout(function(){window.print()},300)}<\/script>
+\x3Cscript>window.onload=function(){setTimeout(function(){window.print()},300)}\x3C/script>
 
-
-
-<script>
-if ("serviceWorker" in navigator) {
-  window.addEventListener("load", function () {
-    navigator.serviceWorker.register("./sw.js", {scope:"./"})
-      .catch(function(err){ console.warn("Service worker registration failed:", err); });
-  });
-}
-</script>
 
 </body></html>`;
 
@@ -1696,6 +1676,13 @@ async function renderMedicines(){
 async function loadMedicineDatabase(){
   // The 100MB JSON is selected manually to avoid file:// fetch/CORS issues.
   try{ await openMedDB(); const c=await medCount(); if(c) renderMedicines(); }catch(e){console.error(e);}
+}
+</script>
+<script>
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", function(){
+    navigator.serviceWorker.register("./sw.js", {scope:"./"}).catch(function(e){console.warn("SW:",e);});
+  });
 }
 </script>
 </body>
